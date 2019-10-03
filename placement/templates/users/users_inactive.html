@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+ {% block content %} 
+
+	<h3> {{ title }}</h3>
+ 
+<ul class="nav nav-tabs">
+  <li role="presentation"><a href="{% url 'users:list' %}">Active</a></li> 
+  <li role="presentation" class="active"><a href="#"><strong>Inactive</strong></a></li>
+</ul>      
+<div class="panel panel-warning">
+		<div class="panel-heading">
+			<h1 class="panel-title">{{ subtitle }} </h1>
+		</div>
+		<div class="panel-body">
+				
+			<div class="row">
+				<div class="col-sm-12">
+
+
+					<div class="table-responsive">
+					<table class="table table-hover table-bordered table table-condensed">
+						<tr>
+
+							<th>Username</th>
+							<th>Name</th>
+							<th>Advisor</th>
+							<th>Tester</th>
+							<th>Admin</th>		
+							<th>Active</th>
+							<th>Show</th>
+							<th>Edit</th>
+						</tr>
+						
+						{% for user in queryset_users %}
+						
+						<tr>	
+							<td>{{ user.cas_user  }}</td>					
+							<td>{{ user.first_name  }} {{ user.last_name  }}</td>							
+							<td class="checkbox-col">
+								{% if user.advisor == 1 %}
+								<input type="checkbox" checked="checked" disabled="disabled" value="{{user.advisor}}" />
+								{% else %}
+								<input type="checkbox" disabled="disabled" value="{{user.advisor}}" />
+								{% endif %}
+							</td>
+							
+							<td class="checkbox-col">
+								{% if user.tester == 1 %}
+								<input type="checkbox" checked="checked" disabled="disabled" value="{{user.tester}}" />
+								{% else %}
+								<input type="checkbox" disabled="disabled" value="{{user.tester}}" />
+								{% endif %}
+							</td>
+							
+							<td class="checkbox-col">
+								{% if user.admin == 1 %}
+								<input type="checkbox" checked="checked" disabled="disabled" value="{{user.admin}}" />
+								{% else %}
+								<input type="checkbox" disabled="disabled" value="{{user.admin}}" />
+								{% endif %}
+							</td>
+							
+							<td class="checkbox-col">
+								{% if user.active == 1 %}
+								<input type="checkbox" checked="checked" disabled="disabled" value="{{user.active}}" />
+								{% else %}
+								<input type="checkbox" disabled="disabled" value="{{user.active}}" />
+								{% endif %}
+							</td>
+							
+							<td><a href="../{{ user.id }}/detail/">Show</a></td>
+							<td><a href="../{{ user.id }}/edit/ ">Edit</a></td>
+						</tr>
+						
+						{% endfor %}
+					</table>
+					</div>
+					
+
+								
+				</div><!-- . col -->
+			</div> <!-- . row -->
+	
+	</div><!-- . panel-body -->
+	
+	<div class="panel-footer">
+		
+				
+				<div class="pagination">
+					<span>{{ total_rows }} Records | </span>
+					
+					<span class="current">
+			            Page {{ scoresheet_list.number }} of {{ scoresheet_list.paginator.num_pages }} | 
+			        </span>
+			        
+			    	<span class="step-links">
+			        {% if scoresheet_list.has_previous %}		        
+			            <a class="btn btn-default" href="?{{ page_request_var }}={{ scoresheet_list.previous_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">previous</a>          
+			        {% endif %}
+			
+			
+			        {% if scoresheet_list.has_next %}
+			            <a class="btn btn-default"  href="?{{ page_request_var }}={{ scoresheet_list.next_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">next</a>
+			        {% endif %}
+			        
+			        
+			        
+			        <span>
+			        	<a class="btn btn-default" href="{% url 'home' %}">New Search</a>
+			        </span>
+			    	</span>
+			    	
+			    	
+				</div>
+	</div><!-- . panel-footer -->		
+</div> <!-- . panel -->	
+ {% endblock %} 

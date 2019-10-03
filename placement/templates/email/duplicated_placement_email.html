@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<p>
+	The following student has just received a duplicate placement in {{ language }}:<br/><br/>
+	Name: {{ full_name }}<br/>
+	Student ID: {{ sid }}<br/>
+	Email: {{ email }}<br/>
+</p>
+
+<p>
+	<strong>Duplicated Records</strong> 
+</p>
+<table>
+	<tr><th>Language</th><th>Level</th><th>Exam Date</th><th>Tester</th></tr>
+	{% for placement in queryset_checker %}
+		<tr>
+			<td>{{ placement.language_name }}</td>
+			<td>{{ placement.level }}</td>
+			<td>{{ placement.exam_date }}</td>
+			<td>{{ placement.cas_user }}</td>
+		</tr>
+	{% endfor %}
+</table>
+<br/>
+<strong>Placement Web System</strong><br/>
+UC Davis Language Center
+</body>
+</html>

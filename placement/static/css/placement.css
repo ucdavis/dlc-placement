@@ -1,0 +1,71 @@
+.errorlist {
+    color: #a94442 !important;
+    font-weight : bold;
+    
+}
+
+.checkbox-col{
+	text-align: center;
+}
+
+/* unvisited link */
+a:link {
+    text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+    text-decoration: none;
+    font-weight: normal;
+}
+
+/* mouse over link */
+a:hover {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* active link */
+a:active {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.error {
+    color: #a9443f;
+    border-color: #ebccd1; 
+    border-width: thin;
+	border-style: solid;
+    background-color: #f2dede;
+
+}
+.success {  
+	color: #264409; 
+	border-color: #d6e9c6;
+	border-width: thin;
+	border-style: solid;
+	background: #dff0d8;
+	}
+	
+.warning {  
+	color: #264409; 
+	border-color: #FFEEB3;
+	border-width: thin;
+	border-style: solid;
+	background: #FFF6C4;
+	}	
+	
+#overlay {
+        background: #ffffff;
+        opacity : 0.8;
+        color: #666666;
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        z-index: 5000;
+        top: 0;
+        left: 0;
+        float: left;
+        text-align: center;
+        padding-top: 25%;
+    }

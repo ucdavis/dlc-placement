@@ -1,0 +1,7 @@
+body {
+  min-height: 2000px;
+  padding-top: 60px !important;
+}
+
+.navbar-nav > li > a {padding-top:20px !important; padding-bottom:5px !important;}
+.navbar {min-height:70px !important}

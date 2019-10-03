@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br><div class='message' id="search_message"></div>
+
+<h3>{{ title }}</h3>
+{% if instance %}
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#"><strong>User Details</strong></a></li> 
+  <li role="presentation"><a href="{% url 'languages_users:edit' instance.id %}">User Languages</a></li>
+</ul>
+{% endif %}
+	<div class="panel panel-warning">
+		<div class="panel-heading"><h1 class="panel-title">{{ subtitle }}{{ instance.cas_user }} </h1></div>
+		<div class="panel-body">
+			<div class="col-sm-9">	
+			<form method="post" action=""> {% csrf_token %}
+				<div class="col-sm-12 text-right">	
+					<a class="btn btn-sm btn-primary" href="#" id="btn_find_user" name="btn_find_user" clean_fields="{{ clean_fields }}">Search User</a>	
+				</div>
+				{{ form|crispy }}				
+				<input type="submit" class="btn btn-primary" name="submit" value="Save" id="submit"/>
+				<a class="btn btn-primary" href="{% url 'users:list' %}">Cancel</a>
+			</form>
+			</div>
+		</div>
+	</div>
+	
+{% endblock  %}

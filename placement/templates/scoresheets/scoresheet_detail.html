@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block head_title %}	
+    	Placement System | {{ subtitle }}
+    {% endblock head_title %}
+
+{% block content %}
+    <h3>{{ title }}</h3>
+<div class="panel panel-warning">
+		<div class="panel-heading"><h1 class="panel-title">{{ subtitle }} </h1></div>
+		<div class="panel-body">
+
+			<table class="table table-condensed table-condensed table-hover">	
+				<tr><td>
+					<label>Student ID : </label>
+				</td><td>				
+					{{ scoresheet.sid }}
+				</tr>
+				
+				<tr><td>
+					<label>First Name : </label>
+				</td><td>
+					{{ scoresheet.first_name }}
+				</tr>
+				
+				<tr><td>
+					<label>Last Name : </label>
+				</td><td>
+					{{ scoresheet.last_name }}
+				</tr>
+				
+				<tr><td>
+					<label>E-mail : </label>
+				</td><td>
+					{{ scoresheet.email }}
+				</tr>
+				
+				<tr><td>
+					<label>Language : </label>
+				</td><td>
+					{{ language.name }}
+				</tr>
+				
+				<tr><td>
+					<label>Placement : </label>
+				</td><td>
+					{{ placement.level }}
+				</tr>
+				
+				<tr><td>
+					<label>Exam Date : </label>
+				</td><td>
+					{{ scoresheet.exam_date }}
+				</tr>
+				
+				<tr><td>
+					<label>Tester : </label>
+				</td><td>
+					{{ tester.cas_user }}	
+				</tr>
+				
+				<tr><td>		
+					<label>Comments : </label>
+				</td><td>
+					{{ scoresheet.comments }}
+				</tr>
+				
+				<tr><td>
+					<label>Needs Review? : </label>
+				</td><td>					
+					{% if scoresheet.needs_review == 1 %}
+					<input type="checkbox" checked="checked" disabled="disabled">
+					{% else %}
+					<input type="checkbox" disabled="disabled">
+					{% endif %}
+				</tr>
+				
+			</table>
+			
+		<hr>
+		<div class="col-sm-6">			
+		<a class="btn btn-default btn-sm" href="{% url 'home' %}">Back</a>	
+		</div>
+		<div class="col-sm-6 text-right">	
+		<form method="get">
+			<input type="hidden" id='email' name="email"  value="{{ scoresheet.email }}"/>
+			<input type="submit" class="btn btn-primary" value="Resend Confirmation Email" />
+		</form>
+		</div>
+		</div>
+	
+		
+		
+</div>
+{% endblock %}

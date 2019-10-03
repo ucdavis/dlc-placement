@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+<h3>Language Placement System</h3>
+
+<!-- Panel Search by SID -->
+<div class="panel panel-warning">
+	<div class="panel-heading"><h1 class="panel-title">Search by Student ID</h1></div>
+	<div class="panel-body">
+		
+	
+		<div class="row">
+			<div class="col-sm-6">		
+				<form action="/scoresheet/list/" method="get">
+				    {% csrf_token %}
+				    {{ formStudent|crispy }}
+				    <input class="btn btn-primary btn-sm"  type="submit" value="Search" />
+				    <input class="btn btn-primary btn-sm"  type="submit" value="Download CSV" name='csv'/>
+				</form>
+			</div>
+			
+			<div class="col-sm-6">
+					<div>
+						<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+							<p class="bg-warning">&#9727; &nbsp;Instructions</p>
+						</a>
+					</div>
+					<div  id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+						<ol>
+					        <li>
+					            <span class="question">Single student search:</span>
+					            <ol>
+					                <li>Search using student ID</li>
+					                <li>Select "Search" to show the result on the screen or "Download CSV" to download a spread sheet file report.</li>
+					            </ol>
+					        </li>
+					        <li>
+					            <span class="question">Multiple student search:</span>
+					            <ol>
+					                <li>Either paste an excel spreadsheet with a list of student numbers OR manually enter student numbers with a new line (enter) or space separator between numbers to complete the search</li>
+					                <li><strong>NOTE: At this point you are limited to searching for about 80 student numbers at one time.</strong></li>
+					            	<li>Select "Search" to show the result on the screen or "Download CSV" to download a spread sheet file report.</li>
+					            </ol>
+					        </li>
+				        
+					    </ol>
+					    <hr>
+					</div>
+			</div>	
+			
+		</div>			
+								
+	</div> <!-- panel-body -->
+</div> <!-- panel -->
+
+
+<!-- Panel Search by Last Name -->
+<div class="panel panel-warning">
+	<div class="panel-heading"><h1 class="panel-title">Search by Student Last Name</h1></div>
+	<div class="panel-body">
+		
+				
+		<div class="row">	
+			<div class="col-sm-6">		
+				<form action="/scoresheet/list/" method="get">
+				    {% csrf_token %}
+				    {{ formLastName.as_p}}
+				    <input class="btn btn-primary btn-sm" type="submit" value="Search" />
+				    <input class="btn btn-primary btn-sm"  type="submit" value="Download CSV" name='csv'/>
+				</form>
+			</div>	
+			
+			<div class="col-sm-6">
+					<div>
+						<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+							<p class="bg-warning">&#9727; &nbsp;Instructions</p>
+							
+						</a>
+					</div>
+					<div  id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+						<ul>
+					        <li>
+					            <span class="question">Single student search:</span>
+					            <ol>
+					                <li>Search using student last name</li>
+					                <li>Select "Search" to show the result on the screen or "Download CSV" to download a spread sheet file report.</li>
+					            </ol>	        
+					    </ul>
+							<hr>
+					</div>
+			</div>	
+			
+		</div>								
+				
+							
+	</div> <!-- panel-body -->
+</div> <!-- panel -->
+
+
+
+<!-- Panel Search by language -->
+<div class="panel panel-warning">
+	<div class="panel-heading"><h1 class="panel-title">Search by Language and Period</h1></div>
+	<div class="panel-body">
+		
+		<div class="row">
+			<div class="col-sm-6">
+					<form action="/scoresheet/list/" method="get">
+					    {% csrf_token %}
+					    {{ formLanguage|crispy}}
+					    <input class="btn btn-primary btn-sm"  type="submit" value="Search"/>
+					    <input class="btn btn-primary btn-sm"  type="submit" value="Download CSV" name='csv'/>
+					</form>
+			</div>
+			
+			<div class="col-sm-6">
+
+					<div>
+						<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<p class="bg-warning">&#9727; &nbsp;Instructions</p>
+						</a>	
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<ul>
+					        <li>
+					            <span class="question">Searching by language:</span>
+					            <ol>
+					                <li>Use drop down menu to select language of choice.</li>
+					                <li>Click on the date field and use the calendar tool to select your date range.</li>
+					                <li>Select "Search" to show the result on the screen or "Download CSV" to download a spread sheet file report.</li>
+					            </ol>
+					        </li>					        
+					    </ul>
+					    <hr>
+					</div>
+				
+			</div>		
+		</div> 
+		
+								
+	</div> <!-- panel-body -->
+</div> <!-- panel -->
+
+
+
+
+
+
+{% endblock %}

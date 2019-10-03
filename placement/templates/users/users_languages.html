@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block head_title %}	
+    	Placement System | {{ subtitle }}
+    {% endblock head_title %}
+
+{% block content %}
+    <h3> {{ title }}</h3>
+<div class="panel panel-warning">
+		<div class="panel-heading"><h1 class="panel-title">{{ subtitle }} </h1></div>
+		<div class="panel-body">
+			
+			
+			<form method="post" action=""> {% csrf_token %}				
+					{{ form|crispy }}							
+					<input type="submit" class="btn btn-primary" name="submit" value="Save" id="submit"/>
+					<a class="btn btn-primary" href="/levels/{{ language_id }}">Cancel</a>
+				</form>
+		
+<a class="btn btn-default" href="{% url 'users:list'%}">Back</a>	
+		</div>
+	
+		
+		
+</div>
+{% endblock %}

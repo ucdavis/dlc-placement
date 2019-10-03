@@ -1,0 +1,21 @@
+bin/
+lib/
+local/
+*.sqlite3
+*.pyo
+pip-selfcheck.json
+*.env
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# Python # 
+*.py[cod] 
+*$py.class 
+
+#Visual Studio Code
+.vscode

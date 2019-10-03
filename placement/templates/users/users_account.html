@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block head_title %}	
+    	Placement System | {{ subtitle }}
+    {% endblock head_title %}
+
+{% block content %}
+    <h3> {{ title }}</h3>
+<div class="panel panel-warning">
+		<div class="panel-heading">
+			<h1 class="panel-title">{{ subtitle }} 				
+			</h1></div>
+		<div class="panel-body">
+
+
+			<table class="table table-condensed table-condensed table-hover">	
+				<tr><td>
+					<label>Username : </label>
+				</td><td>				
+					{{  user.cas_user }}
+				</tr>
+				
+				<tr><td>
+					<label>First Name : </label>
+				</td><td>				
+					{{  user.first_name }}
+				</tr>
+				
+				<tr><td>
+					<label>Last Name : </label>
+				</td><td>				
+					{{  user.last_name }}
+				</tr>
+				
+				<tr><td>
+					<label>Department : </label>
+				</td><td>				
+					{{  user.department }}
+				</tr>
+							
+				<tr><td>
+					<label>Email : </label>
+				</td><td>
+					{{ user.email}}
+				</tr>
+				
+				<tr><td>
+					<label>Advisor : </label>
+				</td><td>					
+					{% if user.advisor == 1 %}
+					<input type="checkbox" checked="checked" disabled="disabled">
+					{% else %}
+					<input type="checkbox" disabled="disabled">
+					{% endif %}
+				</tr>
+				
+				<tr><td>
+					<label>Tester : </label>
+				</td><td>					
+					{% if user.tester == 1 %}
+					<input type="checkbox" checked="checked" disabled="disabled">
+					{% else %}
+					<input type="checkbox" disabled="disabled">
+					{% endif %}
+				</tr>
+				
+				<tr><td>
+					<label>Admin : </label>
+				</td><td>					
+					{% if user.admin == 1 %}
+					<input type="checkbox" checked="checked" disabled="disabled">
+					{% else %}
+					<input type="checkbox" disabled="disabled">
+					{% endif %}
+				</tr>
+				
+				<tr><td>
+					<label>Active : </label>
+				</td><td>					
+					{% if user.active == 1 %}
+					<input type="checkbox" checked="checked" disabled="disabled">
+					{% else %}
+					<input type="checkbox" disabled="disabled">
+					{% endif %}
+				</tr>
+				
+				<tr><td>
+					<label>Date Created : </label>
+				</td><td>
+					{{ user.created_at }}
+				</tr>
+				
+				<tr><td>
+					<label>Date Updated </label>
+				</td><td>
+					{{  user.updated_at  }}	
+				</tr>
+				
+			</table>
+			
+		</div>
+	</div>
+		
+		<div class="panel panel-warning">
+			<div class="panel-heading"><h1 class="panel-title">My Languages </h1></div>
+			<div class="panel-body">
+				
+								
+
+						<div class="col-sm-4">
+							<ol>
+								{% for field in languagesUser %}
+								<li>{{ field.language_name }}</li>
+								{% endfor %}
+					 		
+					 		</ol>
+					 	</div>
+
+				
+				
+		
+			</div>
+		</div>
+{% include "back_btn.html" %}		
+
+{% endblock %}

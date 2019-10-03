@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block head_title %}	
+    	Placement System | {{ instance.name }}
+    {% endblock head_title %}
+
+{% block content %}
+    <h3> {{ title }}</h3>
+<div class="panel panel-warning">
+		<div class="panel-heading"><h1 class="panel-title">{{ title }} | {{ subtitle }} </h1></div>
+		<div class="panel-body">
+			
+
+			<label>Language Name :&nbsp;</label>{{ instance.name }}<br>
+			<label>Created :&nbsp;</label>{{ instance.created_at }}<br>
+			<label>Updated :&nbsp;</label>{{ instance.updated_at }}
+			
+			<hr>			
+			<a class="btn btn-default" href="{% url 'language:list' %}">Back</a>	
+		</div>
+</div>
+{% endblock %}

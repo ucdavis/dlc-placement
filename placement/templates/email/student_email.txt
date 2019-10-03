@@ -1,0 +1,34 @@
+Dear {{ full_name }},
+
+Thank you for taking the {{ language }} Language Placement Evaluation. Your results have been added to our foreign language database which is accessible to the Dean's Office but keep this email for your records. Below is the evaluation report:
+
+Student Name: {{ last_name }}, {{ first_name }}
+Student ID: {{ sid }}
+Tested On: {{ exam_date }}
+Placed Into: {{ placement_level }}
+
+Continuing language students: If you are registered in or wait-listed in a {{ language }} language class which is not consistent with the course you are placed into, please switch to the course indicated above or speak with the {{ language }} language advisor listed below.
+
+If you have been placed into Level 1 of a language that you successfully completed the second or third year in the tenth grade or higher grade in high school you may receive unit credit for the course of that language but the grading mode will be P/NP only.  Speak with the language advisor listed below if you have concerns or questions.  Placement into a language course does not guarantee you space in the class.
+
+Fulfilling the Foreign Language Requirement:  This letter verifies that you have completed the {{ language }} placement exam listed above.  For information about whether or not you have satisfied a Foreign Language requirement, please consult your major or college advisor.
+
+Best wishes for your language learning.
+
+The DLC Staff
+
+
+Foreign Language Advisors:
+
+Language            Advisor               Email
+================================================================  
+Spanish             Vanessa Alvarez       vgalvarez@ucdavis.edu
+
+French, Italian     Amy Lowrey            allowrey@ucdavis.edu
+
+German, Russian     Lorenzo Zúñiga        lozuniga@ucdavis.edu
+
+Chinese, Japanese   Lauren Wong           lnawong@ucdavis.edu
+
+All other
+languages           Michael Mills         mwmills@ucdavis.edu

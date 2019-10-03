@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<br><div class='message' id="search_message"></div>
+<h3> {{ title }}</h3>
+
+	<div class="panel panel-warning">
+		
+		<div class="panel-heading"><h1 class="panel-title">{{ subtitle }} </h1></div>
+		<div class="panel-body">
+				
+			
+			<div class="col-sm-7">			
+				<form method="post" action=""> {% csrf_token %}
+					<div class="col-sm-12 text-right">			
+						<a class="btn btn-sm btn-primary" href="#" id="btn_populate" name="btn_populate" clean_fields="{{ clean_fields }}">Search Student</a>	
+					</div>
+					
+					{{ form|crispy }}
+
+
+					<div class="col-sm-6">								
+						<input type="submit" class="btn btn-primary" name="submit" value="Save" id="submit" onclick="jQuery('#overlay').fadeIn();"/>
+						<a class="btn btn-primary" href="{% url 'home' %} ">Cancel</a>
+						
+					</div>		
+				</form>			
+			</div>	
+						
+		</div>
+	</div>
+	
+{% endblock  %}

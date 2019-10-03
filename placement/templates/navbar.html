@@ -1,0 +1,66 @@
+{% load staticfiles %}
+
+<!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top navbar-">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}"/></a>
+        </div>
+ {% if request.user.is_authenticated and request.session.is_active %}       
+	        <div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav">
+	          	
+	{% if request.session.is_admin or request.session.is_tester or request.session.is_advisor  %} 	         	
+	            <li><a href="{% url 'home' %}">Home</a></li>
+	{% endif %}
+	
+	{% if request.session.is_admin or request.session.is_tester %}     
+	            <li class="dropdown">
+	              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Placement Scoresheet<span class="caret"></span></a>
+	              <ul class="dropdown-menu">
+	                <li><a href="{% url 'scoresheet:create' %}">Enter Placement Result</a></li>
+					{% if request.session.is_admin %}	                
+	                <li><a href="{% url 'scoresheet:bulk_input' %}">Bulk Input</a></li>
+	  				{% endif %}              
+	              </ul>
+	            </li>
+	{% endif %}  
+	            
+	{% if request.session.is_admin%}        
+	            <li class="dropdown">
+	                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+	                <ul class="dropdown-menu">
+	                  <li class="dropdown-header">Users</li>
+	                  <li><a href="{% url 'users:list' %}">View Users</a></li>
+	                  <li><a href="{% url 'users:create' %}">Add User</a></li>
+	                  <li role="separator" class="divider"></li>
+	                  <li class="dropdown-header">Languages</li>
+	                  <li><a href="{% url 'language:list' %}">View Languages</a></li>
+	                  <li><a href="{% url 'language:create' %}">Add Language</a></li>
+	                </ul>
+	              </li>
+        
+	{% endif %}                       
+	          </ul>
+	          
+	 {% endif %}          
+	          <ul class="nav navbar-nav navbar-right">
+	          	{% if request.user.is_authenticated  %} 
+	            		<li><a href="{% url 'users:account' %}">My Account</a></li>	  		        
+		            	<li><a href="{% url 'cas_ng_logout' %}">Logout</a></li>
+		   		{% else %}
+		   				<li><a href="{% url 'cas_ng_login' %}">Login</a></li>
+		   		{% endif %}         	
+          	 </ul>
+          
+          
+        </div><!--/.nav-collapse -->
+
+      </div>
+    </nav>

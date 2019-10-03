@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+ {% block content %} 
+	<h3> {{ title }}</h3>
+  
+      
+<div class="panel panel-warning">
+		<div class="panel-heading">
+			<h1 class="panel-title">{{ subtitle }} </h1>
+		</div>
+		<div class="panel-body">
+			
+			{% if messages %}
+			 {% for message in messages %}
+				<p class="bg-success">
+			    	{{ message }}
+				</p>
+			 {% endfor %}	
+			{% endif %}
+			
+				
+			<div class="row">
+				
+				<div class="col-sm-12">
+
+						<div class="pagination">
+						<span>{{ total_rows }} Records | </span>
+						
+						<span class="current">
+				            Page {{ scoresheet_list.number }} of {{ scoresheet_list.paginator.num_pages }} | 
+				        </span>
+				        
+				    	<span class="step-links">
+				        {% if scoresheet_list.has_previous %}		        
+				            <a class="btn btn-default" href="?{{ page_request_var }}={{ scoresheet_list.previous_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">previous</a>          
+				        {% endif %}
+				
+				
+				        {% if scoresheet_list.has_next %}
+				            <a class="btn btn-default"  href="?{{ page_request_var }}={{ scoresheet_list.next_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">next</a>
+				        {% endif %}
+				        
+				        <span>
+				        	<a class="btn btn-default" href="{% url 'home' %}">New Search</a>
+				        </span>
+				    	</span>
+
+				</div>
+				</div>
+			</div>
+			
+			
+			<div class="row">	
+				<div class="col-sm-12">
+
+					<div class="table-responsive">
+					<table class="table table-hover table-bordered table table-condensed">
+						<tr>
+
+							<th>Student ID</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>E-mail</th>
+							<th>Language</th>
+							<th>Placement</th>
+							<th>Exam Date</th>
+							<th>Tester</th>
+							<th>Comments</th>
+							<th>Needs Review?</th>
+							<th>Show</th>
+						{% if request.session.is_admin or request.session.is_tester %}
+							<th>Edit</th>
+							<th>Destroy</th>
+						{% endif %}
+						</tr>						
+						{% for scoresheet in scoresheet_list %}						
+						<tr>
+							<td>{{ scoresheet.sid }}</td>					
+							<td>{{ scoresheet.first_name }}</td>
+							<td>{{ scoresheet.last_name }}</td>
+							<td>{{ scoresheet.email }}</td>
+							<td>{{ scoresheet.language_name }}</td>
+							<td>{{ scoresheet.level }}</td>
+							<td>{{ scoresheet.exam_date }}</td>
+							<td>{{ scoresheet.cas_user }}</td>
+							<td>{{ scoresheet.comments  }}</td>
+							<td class="checkbox-col">
+								{% if scoresheet.needs_review == 1 %}
+									<input type="checkbox" checked="checked" disabled="disabled">
+								{% else %}
+									<input type="checkbox" disabled="disabled">
+								{% endif %}
+							</td>
+							<td><a href="{% url 'scoresheet:detail' scoresheet.id %}">Show</a></td>
+						{% if request.session.is_admin or request.session.is_tester %}
+							<td><a href="{% url 'scoresheet:edit' scoresheet.id %}">Edit</a></td>
+							<td><a href="{% url 'scoresheet:delete' scoresheet.id %}">Destroy</a></td>
+						{% endif %}	
+						</tr>
+						
+						{% endfor %}
+					</table>
+					</div>
+					
+
+								
+				</div><!-- . col -->
+			</div> <!-- . row -->
+	
+	</div><!-- . panel-body -->
+	
+	<div class="panel-footer">
+		
+				
+				<div class="pagination">
+					<span>{{ total_rows }} Records | </span>
+					
+					<span class="current">
+			            Page {{ scoresheet_list.number }} of {{ scoresheet_list.paginator.num_pages }} | 
+			        </span>
+			        
+			    	<span class="step-links">
+			        {% if scoresheet_list.has_previous %}		        
+			            <a class="btn btn-default" href="?{{ page_request_var }}={{ scoresheet_list.previous_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">previous</a>          
+			        {% endif %}
+			
+			
+			        {% if scoresheet_list.has_next %}
+			            <a class="btn btn-default"  href="?{{ page_request_var }}={{ scoresheet_list.next_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">next</a>
+			        {% endif %}
+			        
+			        
+			        
+			        <span>
+			        	<a class="btn btn-default" href="{% url 'home' %}">New Search</a>
+			        </span>
+			    	</span>
+			    	
+			    	
+				</div>
+	</div><!-- . panel-footer -->		
+</div> <!-- . panel -->	
+ {% endblock %} 

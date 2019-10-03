@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h3>Language Placement System</h3>
+
+<!-- Bulk Input Tool -->
+<div class="panel panel-warning">
+	<div class="panel-heading"><h1 class="panel-title">Bulk Input</h1></div>
+	<div class="panel-body">
+		
+		<div class="row">
+			<div class="col-sm-6">
+				<form action="." method="get">
+					    {% csrf_token %}
+					    {{ form | crispy }}
+					    <input class="btn btn-primary btn-sm"  type="submit" value="Enter Data" onclick="jQuery('#overlay').fadeIn();"/>
+					</form>
+	
+			</div>
+			
+			<div class="col-sm-6">
+
+				<div class="col-sm-12">
+					<div>
+						<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<p class="bg-warning">&#9727; &nbsp;Instructions</p>
+						</a>	
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<ul>
+					        <li>
+					            <span class="question">Inser Multiple Placement Result:</span>
+					            <ol>
+					                <li>Either paste an excel spreadsheet with the data OR manually enter Tab Separated values to be batch.</li>
+					                <li> <strong>The order of the columns must be as follows, and all the fileds are required:</strong><br>
+					                	<ol>
+					                		<li>StudentID</li>
+					                		<li>Student Last Name</li>
+					                		<li>Language</li>
+					                		<li>Placement</li>
+					                		<li> Exam Date ( YYYY-MM-DD )</li>
+					                		<li>Score or Comments.</li>
+					                	</ol>
+</li>
+					                <li>Press the "Enter Data" button and look at the messages area for resulting logs.</li>
+					            </ol>
+					        </li>					        
+					    </ul>
+					    <hr>
+					</div>
+				</div>
+			</div>		
+		</div> 
+		
+								
+	</div> <!-- panel-body -->
+</div> <!-- panel -->
+
+{% endblock %}

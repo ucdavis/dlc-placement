@@ -1,0 +1,12 @@
+The following student information has been entered manually and needs your review:
+
+Name: {{ full_name }}
+Student ID: {{ sid }}
+Email: {{ email }}
+Language : {{ language }}
+Level : {{ placement_level }}
+Exam Date : {{ exam_date }}
+
+
+Placement Web System
+UC Davis Language Center

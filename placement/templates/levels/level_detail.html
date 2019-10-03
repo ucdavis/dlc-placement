@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block head_title %}	
+    	Placement System | {{ subtitle }}
+    {% endblock head_title %}
+
+{% block content %}
+    <h3> {{ title }}</h3>
+<div class="panel panel-warning">
+		<div class="panel-heading"><h1 class="panel-title">{{ language }} | {{ subtitle }} </h1></div>
+		<div class="panel-body">
+			
+			<table class="table table-bordered table-hover">
+				<tr><td>
+						<label>Level Name :</label>
+					</td><td>
+						{{ instance.level }}
+					</td></tr><tr><td>	
+						<label>Active :</label>
+					</td><td>
+						{% if instance.active == 1 %}
+							<input type="checkbox" disabled="disabled"  checked /><br>
+						{% else %}
+							<input type="checkbox" disabled="disabled"/><br>
+						{% endif %}
+					</td></tr><tr><td>		
+						<label>Created :</label>
+					</td><td>	
+						{{ instance.created_at }}
+					</td></tr><tr><td>
+						<label>Updated :</label>
+					</td><td>
+						{{ instance.updated_at }}
+					</td></tr>	
+			
+			</table>
+<hr>			
+<a class="btn btn-default" href="/levels/{{ instance.language_id }}">Back</a>	
+		</div>
+	
+		
+		
+</div>
+{% endblock %}

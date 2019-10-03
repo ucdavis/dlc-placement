@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h3>{{ title }}</h3>
+<ul class="nav nav-tabs">
+  <li role="presentation"><a href="{% url 'users:edit' instance.id %}">User Details</a></li>
+  <li role="presentation"  class="active"><a href="#"><strong>User Languages</strong></a></li>
+</ul>
+
+	<div class="panel panel-warning">
+		<div class="panel-heading"><h1 class="panel-title">{{ subtitle }} </h1></div>
+		<div class="panel-body">
+			
+			<form method="post" action=""> {% csrf_token %}
+<div class="col-sm-12">				
+				<a class="btn btn-sm btn-default" href="#" id="btn-check-all">Check All</a>
+				<a class="btn btn-sm btn-default" href="#" id="btn-uncheck-all">Uncheck All</a>
+				<hr>
+</div>			
+
+				{% for fields in form %}				
+					{% for field in fields  %}
+					<div class="col-sm-4">
+					 {{ field }}
+					 </div>
+					{% endfor %}
+				{% endfor %}
+				
+					
+<div class="col-sm-12">
+	<hr>									
+				<input type="submit" class="btn btn-primary" name="submit" value="Save" id="submit"/>
+				<a class="btn btn-primary" href="{% url 'users:list' %}">Cancel</a>				
+</div>				
+			</form>
+		</div>
+	</div>
+	
+{% endblock  %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block head_title %}	
+    	Placement System | Delete User
+    {% endblock head_title %}
+
+{% block content %}
+    <h3> {{ title }}</h3>
+<div class="panel panel-danger">
+		<div class="panel-heading"><h1 class="panel-title">Delete User </h1></div>
+		<div class="panel-body">
+			
+			
+			<form method="post">{% csrf_token %}
+			    Are you sure you want to delete <strong> "{{ object }}" </strong> ?<br><br>
+			    <input type="submit" class="btn btn-danger" value="Delete" />
+			    <a class="btn btn-default" onclick="goBack()">Cancel</a>
+			</form>
+
+		</div>
+		
+</div>
+{% endblock %}

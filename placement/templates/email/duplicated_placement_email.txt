@@ -1,0 +1,15 @@
+The following student has just received a duplicate placement in {{ language }}:
+
+Name: {{ full_name }}
+Student ID: {{ sid }}
+Email: {{ email }}
+
+Duplicated Records:
+
+Language	Level	Exam Date	Tester
+{% for placement in queryset_checker %}
+{{ placement.language_name }}	{{ placement.level }}	{{ placement.exam_date }}	{{ placement.cas_user }}
+{% endfor %}
+
+Placement Web System
+UC Davis Language Center
