@@ -19,6 +19,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 import os
 import cx_Oracle
+import requests
 
 
 global title
@@ -256,7 +257,7 @@ def scoresheet_bulk_input(request):
 # For each row in file:
 # Check for blank columns and required fields
                 max_rows = 5
-                for row in data:              
+                for row in data:
                     if len(row) < max_rows:
                         messages.error(request,"BLANK COLUMNS. Please provide all the required fields.")
                         return(redirect("scoresheet:bulk_input"))
@@ -298,7 +299,7 @@ def scoresheet_bulk_input(request):
                     student_email =''
                     last_name = scoresheet_data['last_name'] 
                     
-                    student_data = GetStudentBanner(sid=student_id, formatted='dictionary')
+                    student_data = GetStudentIAM(student_id)
                     if 'email' in student_data:
                         student_email = student_data['email']
                     # if email is null looks for ir in LDAP 
@@ -308,8 +309,7 @@ def scoresheet_bulk_input(request):
                             student_email = LDAPemail['email']
 
                     if(student_email !=''):                 
-                        if(GetStudentBanner(sid= student_id, formatted='dictionary')):
-    #                             student_data = GetStudentBanner(sid= student_id, formatted='dictionary')
+                        if(student_data):
                                 scoresheet_data['first_name']=student_data['first_name'] 
                                 scoresheet_data['last_name']=student_data['last_name'] 
                                 if (student_data ['last_name'].lower() != last_name.lower()):
@@ -556,61 +556,35 @@ def GetEmailLDAP(request=False, sid=None):
         print ("Problems connecting with ldap "),error
         return False    
 
-def GetStudentBanner(request=False, sid=None, formatted=None):
-    
-# Build connection string
-    user = os.environ["BANNER_USER"]
-    pswd = os.environ["BANNER_PASS"]
-    host = os.environ["BANNER_HOST"]
-    port = os.environ["BANNER_PORT"]
-    db = os.environ["BANNER_DB"]
-    dsn = cx_Oracle.makedsn (host, port, db)  # @UndefinedVariable
-    
-# Connect to Oracle 
-#     start = time.time()
-    con = cx_Oracle.connect(user, pswd, dsn)  # @UndefinedVariable
-    cur = con.cursor()
-    if (con):
-        cur.prepare("SELECT SPRIDEN_FIRST_NAME, SPRIDEN_LAST_NAME FROM SPRIDEN WHERE SPRIDEN_ID = :sid AND SPRIDEN_CHANGE_IND IS NULL")
-        cur.execute(None, {'sid': sid})
-        result1 = cur.fetchall()
+def GetStudentIAM(sid):
+    host = os.environ["IAM_HOST"]
+    key = os.environ["IAM_KEY"]
 
-        cur.prepare("SELECT SPRIDEN_PIDM FROM SPRIDEN WHERE SPRIDEN_ID = :sid AND SPRIDEN_CHANGE_IND IS NULL")
-        cur.execute(None, {'sid': sid})
-        result2 = cur.fetchall()
-        if result2:
-            pidm = str(result2[0][0])
-            cur.prepare("SELECT GOREMAL_EMAIL_ADDRESS FROM GOREMAL WHERE GOREMAL_PIDM = :pidm AND GOREMAL_EMAL_CODE = 'UCD'")
-            cur.execute(None, {'pidm': pidm})
-            result3 = cur.fetchall()
-            email = ""
-            if result3:
-                email = result3[0][0]
-            else:
-                if(GetEmailLDAP(sid=sid)):
-                    LDAPemail=GetEmailLDAP(sid=sid)           
-                    email = LDAPemail['email']             
-        else:
-            pidm = ""    
-      
-        if (formatted=='json'):
-            student_data=[]
-            if (pidm==""):
-                return HttpResponse(json.dumps(student_data) , content_type="application/json")
-            else:
-                for data in result1:
-                    student_data.append( [data[0],data[1], email ] )
-                return HttpResponse(json.dumps(student_data) , content_type="application/json")
-        elif (formatted=='dictionary'):
-            student_data={}
-            for data in result1:
-                student_data['first_name']=data[0]
-                student_data['last_name']=data[1]
-                student_data['email']=email      
-            return student_data 
+    contact_info = {}
+    iam_resp = requests.get('{host}/api/iam/people/search?studentId={sid}&key={key}'.format(
+        host=host,
+        sid=sid,
+        key=key
+    ))
+    if iam_resp:
+        iam_res = iam_resp.json()
+        if len(iam_res.get('responseData', {}).get('results', [])) > 0:
+            iam_data = iam_res.get('responseData', {}).get('results')[0]
+            contact_info['first_name'] = iam_data['dFirstName']
+            contact_info['last_name'] = iam_data['dLastName']
+            iam_id = iam_data.get('iamId')
+            contact_resp = requests.get('{host}/api/iam/people/contactinfo/{iam_id}?key={key}'.format(
+                host=host,
+                iam_id=iam_id,
+                key=key
+            ))
+            contact_res = contact_resp.json()
+            if len(contact_res.get('responseData', {}).get('results', [])) > 0:
+                contact_data = contact_res.get('responseData', {}).get('results')[0]
+                contact_info['email'] = contact_data['email']
+                return contact_info
 
-    else:
-        return False
+    return False
             
 def GetLanguageId(language_name=None):
     language  = Languages.objects.get(name__exact=language_name)  # @UndefinedVariable
