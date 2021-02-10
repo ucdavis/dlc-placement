@@ -299,7 +299,7 @@ def scoresheet_bulk_input(request):
                     student_email =''
                     last_name = scoresheet_data['last_name'] 
                     
-                    student_data = GetStudentIAM(student_id)
+                    student_data = GetStudentIAM(sid=student_id)
                     if 'email' in student_data:
                         student_email = student_data['email']
                     # if email is null looks for ir in LDAP 
@@ -556,7 +556,7 @@ def GetEmailLDAP(request=False, sid=None):
         print ("Problems connecting with ldap "),error
         return False    
 
-def GetStudentIAM(sid):
+def GetStudentIAM(request=False, sid=None, formatted=None):
     host = os.environ["IAM_HOST"]
     key = os.environ["IAM_KEY"]
 
@@ -572,6 +572,7 @@ def GetStudentIAM(sid):
             iam_data = iam_res.get('responseData', {}).get('results')[0]
             contact_info['first_name'] = iam_data['dFirstName']
             contact_info['last_name'] = iam_data['dLastName']
+            contact_info['email'] = ''
             iam_id = iam_data.get('iamId')
             contact_resp = requests.get('{host}/api/iam/people/contactinfo/{iam_id}?key={key}'.format(
                 host=host,
@@ -581,8 +582,21 @@ def GetStudentIAM(sid):
             contact_res = contact_resp.json()
             if len(contact_res.get('responseData', {}).get('results', [])) > 0:
                 contact_data = contact_res.get('responseData', {}).get('results')[0]
-                contact_info['email'] = contact_data['email']
-                return contact_info
+                contact_email = contact_data.get('email')
+                if contact_email:
+                    contact_info['email'] = contact_email
+                else:
+                    LDAPemail=GetEmailLDAP(sid=sid)
+                    if LDAPemail:
+                        contact_info['email'] = LDAPemail['email']
+            if formatted == 'json':
+                student_data=[]
+                student_data.append([
+                    contact_info['first_name'],
+                    contact_info['last_name'],
+                    contact_info['email']])
+                return HttpResponse(json.dumps(student_data) , content_type="application/json")
+            return contact_info
 
     return False
             
