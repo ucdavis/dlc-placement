@@ -1,0 +1,34 @@
+version: "3"
+services: 
+  django-apache2:
+    build: .
+    container_name: django-deployment
+    environment:
+      - LDAP_PASS=OuWynw89FeromKacjec%
+      - LDAP_SERVER="ldaps://ldap.ucdavis.edu:636"
+      - LDAP_BASE="ou=People,dc=ucdavis,dc=edu"
+      - LDAP_USER="uid=harcsit,ou=Special Users,dc=ucdavis,dc=edu"
+      - BANNER_PASS=7W8PLLVR2G7AD2!C53298RI
+      - BANNER_USER=langlit
+      - BANNER_HOST=tyche.ucdavis.edu
+      - BANNER_PORT=1525
+      - BANNER_DB=prod
+      - ORACLE_HOME=/Users/ednperez/dlc-placement/instantclient_19_8
+      - LD_LIBRARY_PATH=$$ORACLE_HOME
+      - CAS_SERVER_URL="https://ssodev.ucdavis.edu/cas/"
+      - EMAIL_HOST=smtp.ucdavis.edu
+      - EMAIL_PORT=587
+      - EMAIL_HOST_USER=noreply@ucdavis.edu
+      - SECRET_KEY="yty@z7q0&*n5eqx=y5wjx2fx^!a2f$$)!o&k7a%+5&0%$$*!i6b#"
+      - EMAIL_USE_TLS=false
+      - DEBUG_APP=True
+      - ALLOWED_HOSTS="localhost,127.0.0.1"
+      - EMAIL_FAIL_SILENTLY=True
+      - ADMIN_EMAIL_LIST=eduranperez@ucdavis.edu;
+      - IAM_HOST=https://iet-ws.ucdavis.edu
+      - IAM_KEY=b0bf9142-0f15-4035-8964-0fef8a0ac5a6
+    ports:
+      - '8005:80'
+      - '3501:3500'
+      - '4701:81'
+    command: bash -c "./startup.sh && service apache2 start && tail -f /var/www/html/placement/logs/*.log"
