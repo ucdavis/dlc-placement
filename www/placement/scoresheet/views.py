@@ -18,7 +18,6 @@ from django.template import loader, Context
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 import os
-import cx_Oracle
 import requests
 
 
@@ -597,8 +596,10 @@ def GetStudentIAM(request=False, sid=None, formatted=None):
                     contact_info['email']])
                 return HttpResponse(json.dumps(student_data) , content_type="application/json")
             return contact_info
-
-    return False
+    if formatted == 'json':
+        return HttpResponse(json.dumps([]) , content_type="application/json")
+    else:
+        return False
             
 def GetLanguageId(language_name=None):
     language  = Languages.objects.get(name__exact=language_name)  # @UndefinedVariable

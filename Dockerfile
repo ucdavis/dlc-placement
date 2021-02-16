@@ -5,6 +5,7 @@ RUN apt-get -y install libapache2-mod-wsgi
 RUN apt-get -y install python-pip
 RUN apt-get -y install libsasl2-dev python-dev libldap2-dev libssl-dev
 
+RUN a2enmod rewrite
 
 ADD ./site-config.conf /etc/apache2/sites-available/000-default.conf 
 ADD ./requirements.txt /var/www/html
@@ -29,4 +30,3 @@ RUN echo ". /etc/environment" >> /etc/apache2/envvars
 
 EXPOSE 80 3500 
 CMD ["/bin/bash", "/var/www/html/startup.sh"]
-#CMD ["apachectl", "-D", "FOREGROUND"]
