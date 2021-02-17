@@ -185,3 +185,31 @@ STATICFILES_DIRS = [
                     os.path.join(BASE_DIR, "static"),
                     ]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[contactor] %(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'WARN',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'WARN',
+            'propagate': False,
+        },
+    }
+}

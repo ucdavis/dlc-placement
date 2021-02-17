@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 from django.conf import settings
 if not settings.DEBUG:
     import os
-    
     # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
@@ -177,3 +176,32 @@ if not settings.DEBUG:
                         os.path.join(BASE_DIR, "static"),
                         ]
     STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
+
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse'
+            }
+        },
+        'formatters': {
+            'verbose': {
+                'format': '[contactor] %(levelname)s %(asctime)s %(message)s'
+            },
+        },
+        'handlers': {
+            'console': {
+                'level': 'WARN',
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            '': {
+                'handlers': ['console'],
+                'level': 'WARN',
+                'propagate': False,
+            },
+        }
+    }
