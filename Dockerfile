@@ -15,7 +15,10 @@ COPY www  /var/www/html
 WORKDIR /var/www/html
 RUN chmod +x  ./startup.sh
 RUN pip install -r requirements.txt
-RUN chmod 775 /var/www/html/placement/placement 
+RUN mkdir /var/www/html/placement/temp
+RUN chown :www-data /var/www/html/placement/temp
+RUN chmod 775 /var/www/html/placement/temp
+RUN chmod 775 /var/www/html/placement/placement
 RUN echo ". /etc/environment" >> /etc/apache2/envvars
 
 EXPOSE 80 3500 
