@@ -7,6 +7,7 @@ echo "export CAS_SERVER_URL=${CAS_SERVER_URL}" >> /etc/environment
 echo "export EMAIL_HOST=${EMAIL_HOST}" >> /etc/environment
 echo "export EMAIL_PORT=${EMAIL_PORT}" >> /etc/environment
 echo "export EMAIL_HOST_USER=${EMAIL_HOST_USER}" >> /etc/environment
+echo "export EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}" >> /etc/environment
 echo "export SECRET_KEY=${SECRET_KEY}" >> /etc/environment
 echo "export EMAIL_USE_TLS=${EMAIL_USE_TLS}" >> /etc/environment
 echo "export DEBUG_APP=${DEBUG_APP}" >> /etc/environment
