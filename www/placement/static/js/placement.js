@@ -40,7 +40,7 @@ $(document).ready(function(){
 		formatted = 'json';
 		clean_fields = $(this).attr('clean_fields');
 		$.ajax({
-			url	: "/scoresheet/GetStudentIAM/"+sid+"/"+formatted+"/",
+			url	: "/scoresheet/GetStudentBanner/"+sid+"/"+formatted+"/",
 			success	: function(data){
 				if(data.length == 0){
 					sid = $('#id_sid').val();
