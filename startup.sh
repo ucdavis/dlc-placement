@@ -14,7 +14,10 @@ echo "export DEBUG_APP=${DEBUG_APP}" >> /etc/environment
 echo "export ALLOWED_HOSTS=${ALLOWED_HOSTS}" >> /etc/environment
 echo "export EMAIL_FAIL_SILENTLY=${EMAIL_FAIL_SILENTLY}" >> /etc/environment
 echo "export ADMIN_EMAIL_LIST=${ADMIN_EMAIL_LIST}" >> /etc/environment
-echo "export IAM_HOST=${IAM_HOST}" >> /etc/environment
-echo "export IAM_KEY=${IAM_KEY}" >> /etc/environment
+echo "export BANNER_HOST=${BANNER_HOST}" >> /etc/environment
+echo "export BANNER_USER=${BANNER_USER}" >> /etc/environment
+echo "export BANNER_PASS=${BANNER_PASS}" >> /etc/environment
+echo "export BANNER_PORT=${BANNER_PORT}" >> /etc/environment
+echo "export BANNER_DB=${BANNER_DB}" >> /etc/environment
 echo ". /etc/environment" >> /etc/apache2/envvars
 apachectl -D FOREGROUND
