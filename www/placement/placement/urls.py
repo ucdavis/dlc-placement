@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^scoresheet/', include("scoresheet.urls", namespace="scoresheet")),
     url(r'^users/', include("users.urls", namespace="users")),
     url(r'^languages_users/', include("languages_users.urls", namespace="languages_users")),
+    url(r'^status/', include("status.urls", namespace="status")),
 ]
