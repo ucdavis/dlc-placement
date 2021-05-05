@@ -126,11 +126,11 @@ WSGI_APPLICATION = 'placement.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db/db.sqlite3'),
     },
     'production': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':os.path.join(BASE_DIR, 'production.sqlite3'),
+        'NAME':os.path.join(BASE_DIR, 'db/production.sqlite3'),
     }, 
 }
 
@@ -163,6 +163,7 @@ EMAIL_HOST = os.environ['EMAIL_HOST']
 EMAIL_PORT = os.environ['EMAIL_PORT']
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -185,3 +186,31 @@ STATICFILES_DIRS = [
                     os.path.join(BASE_DIR, "static"),
                     ]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[contactor] %(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'WARN',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'WARN',
+            'propagate': False,
+        },
+    }
+}
