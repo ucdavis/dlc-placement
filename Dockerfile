@@ -1,6 +1,6 @@
 FROM python:2.7
 RUN apt-get update
-RUN apt-get install -y apt-utils vim curl apache2 apache2-utils
+RUN apt-get install -y apt-utils curl apache2 apache2-utils
 RUN apt-get -y install libapache2-mod-wsgi
 RUN apt-get -y install python-pip
 RUN apt-get -y install libsasl2-dev python-dev libldap2-dev libssl-dev
