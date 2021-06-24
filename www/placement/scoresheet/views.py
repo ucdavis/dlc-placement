@@ -185,7 +185,7 @@ def scoresheet_create(request):
                 html_content = email_html_template.render(context)
                 text_content = email_txt_template.render(context)          
                 subject = "Message from Placement"
-                from_email = settings.EMAIL_HOST_USER
+                from_email = settings.EMAIL_FROM
                 message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
                 message.attach_alternative(html_content, 'text/html')
                 message.send(fail_silently=EMAIL_FAIL_SILENTLY)
@@ -199,7 +199,7 @@ def scoresheet_create(request):
                 html_content = email_html_template.render(context)
                 text_content = email_txt_template.render(context)          
                 subject = "Duplicated Placement"
-                from_email = settings.EMAIL_HOST_USER
+                from_email = settings.EMAIL_FROM
                 message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
                 message.attach_alternative(html_content, 'text/html')
                 message.send(fail_silently=EMAIL_FAIL_SILENTLY)
@@ -213,7 +213,7 @@ def scoresheet_create(request):
                 html_content = email_html_template.render(context)
                 text_content = email_txt_template.render(context)          
                 subject = "Placement Manually Entered"
-                from_email = settings.EMAIL_HOST_USER
+                from_email = settings.EMAIL_FROM
                 message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
                 message.attach_alternative(html_content, 'text/html')
                 message.send(fail_silently = EMAIL_FAIL_SILENTLY) 
@@ -330,7 +330,7 @@ def scoresheet_bulk_input(request):
                                                language_id = scoresheet_data['language_id'],
                                                placement_level_id = scoresheet_data['placement_level_id']
                                                )
-                                    instance.save()           
+                                    instance.save()
                                     log_message = "CREATED. Scoresheet Student ID : "+ str(instance.sid)+". "   
                                     
                                        
@@ -368,7 +368,7 @@ def scoresheet_bulk_input(request):
                                         html_content = email_html_template.render(context)
                                         text_content = email_txt_template.render(context)          
                                         subject = "Duplicated Placement"
-                                        from_email = settings.EMAIL_HOST_USER
+                                        from_email = settings.EMAIL_FROM
                                         message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
                                         message.attach_alternative(html_content, 'text/html')
                                         message.send(fail_silently = EMAIL_FAIL_SILENTLY)
@@ -383,7 +383,7 @@ def scoresheet_bulk_input(request):
                                         html_content = email_html_template.render(context)
                                         text_content = email_txt_template.render(context)          
                                         subject = "Message from Placement"
-                                        from_email = settings.EMAIL_HOST_USER
+                                        from_email = settings.EMAIL_FROM
                                         message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
                                         message.attach_alternative(html_content, 'text/html')
                                         message.send(fail_silently = EMAIL_FAIL_SILENTLY)
@@ -451,7 +451,7 @@ def scoresheet_detail(request, id=None):  # @ReservedAssignment
         html_content = email_html_template.render(context)
         text_content = email_txt_template.render(context)          
         subject = "Message from Placement"
-        from_email = settings.EMAIL_HOST_USER
+        from_email = settings.EMAIL_FROM
         message = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
         message.attach_alternative(html_content, 'text/html')
         message.send(fail_silently = EMAIL_FAIL_SILENTLY)
@@ -557,8 +557,7 @@ def GetEmailLDAP(request=False, sid=None):
         return False    
 
 def GetStudentBanner(request=False, sid=None, formatted=None):
-    
-# Build connection string
+    # Build connection string
     user = os.environ["BANNER_USER"]
     pswd = os.environ["BANNER_PASS"]
     host = os.environ["BANNER_HOST"]
@@ -566,8 +565,7 @@ def GetStudentBanner(request=False, sid=None, formatted=None):
     db = os.environ["BANNER_DB"]
     dsn = cx_Oracle.makedsn (host, port, db)  # @UndefinedVariable
     
-# Connect to Oracle 
-#     start = time.time()
+    # Connect to Oracle
     con = cx_Oracle.connect(user, pswd, dsn)  # @UndefinedVariable
     cur = con.cursor()
     if (con):

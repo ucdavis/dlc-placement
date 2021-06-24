@@ -164,6 +164,7 @@ EMAIL_PORT = os.environ['EMAIL_PORT']
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_FROM = os.environ['EMAIL_FROM']
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
