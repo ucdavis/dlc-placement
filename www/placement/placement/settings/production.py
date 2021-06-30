@@ -120,12 +120,24 @@ if not settings.DEBUG:
     
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db/db.sqlite3'),
+            #'ENGINE': 'django.db.backends.sqlite3',
+            #'NAME': os.path.join(BASE_DIR, 'db/db.sqlite3'), # can become dlc_users
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'dlc_users',
+            'USER': 'root',
+            'PASSWORD': 'mysql_passwd',
+            'HOST': 'localhost',
+            'PORT': '3306',
         },
         'production': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME':os.path.join(BASE_DIR, 'db/production.sqlite3'),
+            #'ENGINE': 'django.db.backends.sqlite3', # can become dlc_data
+            #'NAME':os.path.join(BASE_DIR, 'db/production.sqlite3'),
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'dlc_data',
+            'USER': 'root',
+            'PASSWORD': 'mysql_passwd',
+            'HOST': 'localhost',
+            'PORT': '3306',
         }, 
     }
     

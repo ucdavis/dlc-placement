@@ -1,15 +1,15 @@
 from django import forms
 from .models import Scoresheet
-from languages.models import Languages
+#from languages.models import Languages
 from levels.models import PlacementLevels
 from functools import partial
 
 
 # # Choices for Language
-queryset = Languages.objects.all().order_by('name')  # @UndefinedVariable
+#queryset = Languages.objects.all().order_by('name')  # @UndefinedVariable
 language_choices = [['','--------']]  
-for data in queryset:
-    language_choices.append([data.id,data.name])
+#for data in queryset:
+#    language_choices.append([data.id,data.name])
      
 # Choices for Levels    
 queryset = PlacementLevels.objects.filter(active = 1).order_by('level')  # @UndefinedVariable

@@ -1,7 +1,7 @@
 from django import forms
 from languages.models import Languages
 
-languages_queryset = Languages.objects.values_list("id","name").order_by('name')  # @UndefinedVariable
+#languages_queryset = Languages.objects.values_list("id","name").order_by('name')  # @UndefinedVariable
 class LanguagesUsersForm(forms.Form):
     
     
@@ -9,7 +9,7 @@ class LanguagesUsersForm(forms.Form):
     language_id = forms.MultipleChoiceField(required=False,
                                             label = "Languages", 
                                             widget=forms.CheckboxSelectMultiple, 
-                                            choices=languages_queryset)
+                                            )#choices=languages_queryset)
     user_id = forms.IntegerField()
     class Meta:
 
