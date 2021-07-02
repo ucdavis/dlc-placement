@@ -128,7 +128,7 @@ DATABASES = {
         #'ENGINE': 'django.db.backends.sqlite3',
         #'NAME': os.path.join(BASE_DIR, 'db/db.sqlite3'), # can become dlc_users
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dlc_users',
+        'NAME': 'dlc_django_data',
         'USER': 'root',
         'PASSWORD': 'mysql_passwd',
         'HOST': 'docker.for.mac.localhost',
