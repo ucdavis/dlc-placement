@@ -6,7 +6,7 @@ from django.db.models.fields import CharField
 # Create your models here.
 class Scoresheet(models.Model):
     id = models.AutoField(primary_key=True) # AutoField?
-    sid = models.CharField(max_length=9, null=False, blank=True, default='')
+    sid = models.CharField(max_length=16, null=False, blank=True, default='')
     first_name = models.CharField(max_length=32, blank=True, default='')
     last_name = models.CharField(max_length=32,blank=True, default='')
     email = models.EmailField()
@@ -34,7 +34,7 @@ class Scoresheet(models.Model):
 
 class ScoresheetView(models.Model):
     id = models.IntegerField(primary_key=True) # AutoField?
-    sid = models.CharField(max_length=9, null=False, blank=True, default='')
+    sid = models.CharField(max_length=16, null=False, blank=True, default='')
     first_name = models.CharField(max_length=32, blank=True, default='')
     last_name = models.CharField(max_length=32,blank=True, default='')
     email = models.EmailField()
@@ -42,7 +42,7 @@ class ScoresheetView(models.Model):
     user_id = models.IntegerField()
     cas_user = models.CharField(max_length=255)
     level_id = models.IntegerField()
-    level = CharField(max_length=255)
+    level = CharField(max_length=500)
     exam_date = models.DateField()
     language_id = models.IntegerField()
     language_name = models.CharField(max_length=255, null=True)

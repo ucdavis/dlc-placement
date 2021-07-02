@@ -6,7 +6,7 @@ from django.db import models
 
 class PlacementLevels(models.Model):
     id = models.IntegerField(primary_key=True) # AutoField?
-    level = models.CharField(max_length=255, unique = True)
+    level = models.CharField(max_length=500)
     language_id = models.IntegerField()
     active = models.BooleanField(default = 1)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
