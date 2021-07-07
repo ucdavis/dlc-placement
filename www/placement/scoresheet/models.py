@@ -52,6 +52,6 @@ class ScoresheetView(models.Model):
         return self.sid
      
     class Meta:
-        managed = True
+        managed = False
         app_label ='scoresheet'
         db_table = 'scoresheets_view'

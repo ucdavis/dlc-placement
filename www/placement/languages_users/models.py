@@ -30,6 +30,6 @@ class LanguagesUsersView(models.Model):
         return self.language_name
      
     class Meta:
-        managed = True
+        managed = False
         app_label ='languages_users'
         db_table = 'languages_users_view'

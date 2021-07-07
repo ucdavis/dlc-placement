@@ -16,6 +16,7 @@ local_settings.py
 # Python # 
 *.py[cod] 
 *$py.class 
+.DS_STORE
 
 #Visual Studio Code
 .vscode
