@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 
 class LanguagesUsers(models.Model):
-    id = models.IntegerField(primary_key=True) # AutoField?
+    id = models.AutoField(primary_key=True) # AutoField?
     language_id = models.IntegerField() # AutoField?
     user_id = models.IntegerField()# AutoField?
 
