@@ -252,6 +252,7 @@ def scoresheet_bulk_input(request):
             with open(path) as txt_file:
                 reader = csv.reader(txt_file, delimiter="\t")
                 data = list(reader)
+
                 
 # For each row in file:
 # Check for blank columns and required fields
@@ -278,7 +279,7 @@ def scoresheet_bulk_input(request):
                     if (len(row)==5):                                           
                         scoresheet_data['comments'] = "Bulk Input"
                     
-                    scoresheet_data['sid'] = row[0]
+                    scoresheet_data['id'] = row[0]
                     scoresheet_data['last_name'] = row[1]
                     scoresheet_data['language'] = row[2]   
                     scoresheet_data['placement'] = row[3]
@@ -293,112 +294,122 @@ def scoresheet_bulk_input(request):
                     level_id = GetLevelId(level_name=scoresheet_data['placement'])
  
                  
-# Match student ID and last_name in Banner. If student is valid add the information to the scoresheet array
-                    student_id = scoresheet_data['sid']
-                    student_email =''
-                    last_name = scoresheet_data['last_name'] 
-                    
-                    student_data = GetStudentBanner(sid=student_id, formatted='dictionary')
-                    if 'email' in student_data:
-                        student_email = student_data['email']
-                    # if email is null looks for ir in LDAP 
-                    if(student_email ==''):
-                        LDAPemail= GetEmailLDAP(sid=student_id)
-                        if('email' in LDAPemail):
-                            student_email = LDAPemail['email']
+                    # Match student ID and last_name in Banner. If student is valid add the information to the scoresheet array
+                    last_name = scoresheet_data['last_name']
 
-                    if(student_email !=''):                 
-                        if(GetStudentBanner(sid= student_id, formatted='dictionary')):
-    #                             student_data = GetStudentBanner(sid= student_id, formatted='dictionary')
-                                scoresheet_data['first_name']=student_data['first_name'] 
-                                scoresheet_data['last_name']=student_data['last_name'] 
-                                if (student_data ['last_name'].lower() != last_name.lower()):
-                                    messages.error(request, "NOT MATCH. Student ID and Last Name do not match for sid: "+scoresheet_data['sid'])
-                                
-                                else:       
-                                    scoresheet_data['email']=student_data['email']                 
-                                    scoresheet_data['language_id'] = language_id
-                                    scoresheet_data['placement_level_id'] = level_id
-    # If the student is valid Save the scoresheet
-                                    instance = Scoresheet(sid = scoresheet_data['sid'],
-                                               first_name = scoresheet_data['first_name'],
-                                               last_name = scoresheet_data['last_name'],    
-                                               email = student_email,
-                                               comments = scoresheet_data['comments'],
-                                               tester_id = request.session['user_id'],
-                                               exam_date = scoresheet_data['exam_date'] ,
-                                               language_id = scoresheet_data['language_id'],
-                                               placement_level_id = scoresheet_data['placement_level_id']
-                                               )
-                                    instance.save()
-                                    log_message = "CREATED. Scoresheet Student ID : "+ str(instance.sid)+". "   
-                                    
-                                       
-                                                 
-    # After creating the scoresheet, check if it was duplicated
-                                    duplicated_checker = ScoresheetView.objects.filter(# @UndefinedVariable
-                                                                 Q(sid__exact = instance.sid)&
-                                                                 Q(level_id = instance.placement_level_id)
-                                                                 )
-        
-    # Create context for Emails
-                                    language = Languages.objects.get(id = instance.language_id)  # @UndefinedVariable
-                                    placement_level = PlacementLevels.objects.get(id = instance.placement_level_id)  # @UndefinedVariable
-                                    EMAIL_FAIL_SILENTLY=False
-                                    if(os.environ['EMAIL_FAIL_SILENTLY'] == "True"):
-                                        EMAIL_FAIL_SILENTLY=True
-        
-                                    context = Context({
-                                               "full_name" : instance.first_name + " " +instance.last_name,
-                                               "first_name" : instance.first_name,
-                                               "last_name" : instance.last_name,
-                                               "language" : language,
-                                               "sid" : instance.sid,                       
-                                               "exam_date" : instance.exam_date,
-                                               "email" : instance.email,
-                                               "placement_level" : placement_level,
-                                               "queryset_checker" : duplicated_checker                     
-                                               })  
-                                    
-    # If scoresheet was duplicated add a warning to message and send email to administrators                                                        
-                                    if (duplicated_checker.count() >= 2):
-                                        to_email = os.environ['ADMIN_EMAIL_LIST'].split(';')
-                                        email_html_template = loader.get_template('duplicated_placement_email.html')
-                                        email_txt_template = loader.get_template('duplicated_placement_email.txt')
-                                        html_content = email_html_template.render(context)
-                                        text_content = email_txt_template.render(context)          
-                                        subject = "Duplicated Placement"
-                                        from_email = settings.EMAIL_FROM
-                                        message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-                                        message.attach_alternative(html_content, 'text/html')
-                                        message.send(fail_silently = EMAIL_FAIL_SILENTLY)
-                                        log_message +=  "DUPLICATED scoresheet sent to administrator for review."
-                                                                                                     
-                                        
-    # If scoresheet was not duplicated send confirmation Email to student                                 
-                                    elif (duplicated_checker.count() == 1):
-                                        to_email = [instance.email]                                    
-                                        email_html_template = loader.get_template('student_email.html')
-                                        email_txt_template = loader.get_template('student_email.txt')
-                                        html_content = email_html_template.render(context)
-                                        text_content = email_txt_template.render(context)          
-                                        subject = "Message from Placement"
-                                        from_email = settings.EMAIL_FROM
-                                        message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-                                        message.attach_alternative(html_content, 'text/html')
-                                        message.send(fail_silently = EMAIL_FAIL_SILENTLY)
-    # Diplay message                              
-                                    if "DUPLICATED" in log_message:
-                                        messages.warning(request, log_message)
-                                    else:
-                                        messages.success(request, log_message)      
+                    is_id_sid = scoresheet_data['id'].isdigit()
+
+                    if is_id_sid:
+                        student_id = scoresheet_data['id']
+                        student_email = ''
+                        student_data = GetStudentBanner(sid=student_id, formatted='dictionary')
+                        if 'email' in student_data:
+                            student_email = student_data['email']
+                        # if email is null looks for it in LDAP
+                        if(student_email ==''):
+                            LDAPemail= GetEmailLDAP(sid=student_id)
+                            if('email' in LDAPemail):
+                                student_email = LDAPemail['email']
+                    else:
+                        student_id = ''
+                        student_email = scoresheet_data['id']
+                        student_data = GetStudentInfoFromEmail(email=student_email, formatted='dictionary')
+                        if 'sid' in student_data:
+                            student_id = student_data['sid']
+
+
+                    if student_email != '' and student_id != '':
+                        scoresheet_data['first_name']=student_data['first_name']
+                        scoresheet_data['last_name']=student_data['last_name']
+                        if (student_data ['last_name'].lower() != last_name.lower()):
+                            if is_id_sid:
+                                messages.error(request, "NOT MATCH. Student ID and Last Name do not match for sid: "+student_id)
+                            else:
+                                messages.error(request, "NOT MATCH. Email and Last Name do not match for email: "+student_email)
+                        else:
+                            scoresheet_data['email']=student_email
+                            scoresheet_data['language_id'] = language_id
+                            scoresheet_data['placement_level_id'] = level_id
+                            # If the student is valid Save the scoresheet
+                            instance = Scoresheet(sid = student_id,
+                                       first_name = scoresheet_data['first_name'],
+                                       last_name = scoresheet_data['last_name'],
+                                       email = student_email,
+                                       comments = scoresheet_data['comments'],
+                                       tester_id = request.session['user_id'],
+                                       exam_date = scoresheet_data['exam_date'] ,
+                                       language_id = scoresheet_data['language_id'],
+                                       placement_level_id = scoresheet_data['placement_level_id']
+                                       )
+                            instance.save()
+                            if is_id_sid:
+                                log_message = "CREATED. Scoresheet Student ID : "+ str(instance.sid)+". "
+                            else:
+                                log_message = "CREATED. Scoresheet Student Email : "+ instance.email+". "
+
+                            # After creating the scoresheet, check if it was duplicated
+                            duplicated_checker = ScoresheetView.objects.filter(# @UndefinedVariable
+                                                         Q(sid__exact = instance.sid)&
+                                                         Q(level_id = instance.placement_level_id)
+                                                         )
+
+                            # Create context for Emails
+                            language = Languages.objects.get(id = instance.language_id)  # @UndefinedVariable
+                            placement_level = PlacementLevels.objects.get(id = instance.placement_level_id)  # @UndefinedVariable
+                            EMAIL_FAIL_SILENTLY=False
+                            if(os.environ['EMAIL_FAIL_SILENTLY'] == "True"):
+                                EMAIL_FAIL_SILENTLY=True
+
+                            context = Context({
+                                       "full_name" : instance.first_name + " " +instance.last_name,
+                                       "first_name" : instance.first_name,
+                                       "last_name" : instance.last_name,
+                                       "language" : language,
+                                       "sid" : instance.sid,
+                                       "exam_date" : instance.exam_date,
+                                       "email" : instance.email,
+                                       "placement_level" : placement_level,
+                                       "queryset_checker" : duplicated_checker
+                                       })
+
+                            # If scoresheet was duplicated add a warning to message and send email to administrators
+                            if (duplicated_checker.count() >= 2):
+                                to_email = os.environ['ADMIN_EMAIL_LIST'].split(';')
+                                email_html_template = loader.get_template('duplicated_placement_email.html')
+                                email_txt_template = loader.get_template('duplicated_placement_email.txt')
+                                html_content = email_html_template.render(context)
+                                text_content = email_txt_template.render(context)
+                                subject = "Duplicated Placement"
+                                from_email = settings.EMAIL_FROM
+                                message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+                                message.attach_alternative(html_content, 'text/html')
+                                message.send(fail_silently = EMAIL_FAIL_SILENTLY)
+                                log_message +=  "DUPLICATED scoresheet sent to administrator for review."
+
+                            # If scoresheet was not duplicated send confirmation Email to student
+                            elif (duplicated_checker.count() == 1):
+                                to_email = [instance.email]
+                                email_html_template = loader.get_template('student_email.html')
+                                email_txt_template = loader.get_template('student_email.txt')
+                                html_content = email_html_template.render(context)
+                                text_content = email_txt_template.render(context)
+                                subject = "Message from Placement"
+                                from_email = settings.EMAIL_FROM
+                                message = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+                                message.attach_alternative(html_content, 'text/html')
+                                message.send(fail_silently = EMAIL_FAIL_SILENTLY)
+                            # Diplay message
+                            if "DUPLICATED" in log_message:
+                                messages.warning(request, log_message)
+                            else:
+                                messages.success(request, log_message)
                                                   
                                     
-    # If Student ID was not found in LDAP display error message and do nothing. Must be entered via single scoresheet                   
-                        else:
-                                messages.error(request, "NOT FOUND. Student ID : "+scoresheet_data['sid'])
+                    # If Student ID was not found in LDAP display error message and do nothing. Must be entered via single scoresheet
+                    elif student_id == '':
+                            messages.error(request, "NOT FOUND. Email : "+student_email)
                     else:  
-                            messages.error(request, "NO EMAIL. No email registered for sid: "+scoresheet_data['sid'])                  
+                            messages.error(request, "NO EMAIL. No email registered for sid: "+student_id)
                 txt_file.closed
                 os.remove(settings.BASE_DIR+'/temp/data.txt')
                                                     
@@ -610,6 +621,42 @@ def GetStudentBanner(request=False, sid=None, formatted=None):
     else:
         return False
             
+def GetStudentInfoFromEmail(request=False, email=None, formatted='json'):
+    if email:
+        user = os.environ["BANNER_USER"]
+        pswd = os.environ["BANNER_PASS"]
+        host = os.environ["BANNER_HOST"]
+        port = os.environ["BANNER_PORT"]
+        db = os.environ["BANNER_DB"]
+        dsn = cx_Oracle.makedsn (host, port, db)
+        con = cx_Oracle.connect(user, pswd, dsn)
+        cur = con.cursor()
+        if (con):
+            cur.prepare("SELECT GOREMAL_PIDM FROM GOREMAL WHERE GOREMAL_EMAIL_ADDRESS = :email AND GOREMAL_EMAL_CODE = 'UCD'")
+            cur.execute(None, {'email': email})
+            pidm_res = cur.fetchall()
+            if pidm_res:
+                pidm = str(pidm_res[0][0])
+                cur.prepare("SELECT SPRIDEN_FIRST_NAME, SPRIDEN_LAST_NAME, SPRIDEN_ID FROM SPRIDEN WHERE SPRIDEN_PIDM = :pidm AND SPRIDEN_CHANGE_IND IS NULL")
+                cur.execute(None, {'pidm': pidm})
+                info_res = cur.fetchall()
+                if info_res:
+                    if formatted == 'json':
+                        student_data=[[info_res[0][0], info_res[0][1], info_res[0][2]]]
+                        return HttpResponse(json.dumps(student_data) , content_type="application/json")
+                    else:
+                        student_data = {
+                            'first_name': info_res[0][0],
+                            'last_name': info_res[0][1],
+                            'sid': info_res[0][2]
+                        }
+                        return student_data
+
+        if formatted == 'json':
+            return HttpResponse(json.dumps([]) , content_type="application/json")
+        else:
+            return {}
+
 def GetLanguageId(language_name=None):
     language  = Languages.objects.get(name__exact=language_name)  # @UndefinedVariable
     return language.id
