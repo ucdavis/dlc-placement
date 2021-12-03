@@ -34,36 +34,66 @@ $(document).ready(function(){
 	
 // AJAX call to Banner for searching for STUDENT info
 	$("#btn_populate").on('click',function(e){
-		jQuery('#overlay').fadeIn();
 		e.preventDefault();
 		sid = $("#id_sid").val();
+		email = $("#id_email").val();
 		formatted = 'json';
 		clean_fields = $(this).attr('clean_fields');
-		$.ajax({
-			url	: "/scoresheet/GetStudentBanner/"+sid+"/"+formatted+"/",
-			success	: function(data){
-				if(data.length == 0){
-					sid = $('#id_sid').val();
-					$("#search_message").html("<li class='error'>NOT FOUND Student ID: "+sid+"</li>");
-					$("#id_needs_review").val(1);
-					jQuery('#overlay').fadeOut();
-					if(clean_fields=='True'){
+		if(sid){
+			jQuery('#overlay').fadeIn();
+			$.ajax({
+				url	: "/scoresheet/GetStudentBanner/"+sid+"/"+formatted+"/",
+				success	: function(data){
+					if(data.length == 0){
+						sid = $('#id_sid').val();
+						$("#search_message").html("<li class='error'>NOT FOUND Student ID: "+sid+"</li>");
+						$("#id_needs_review").val(1);
+						jQuery('#overlay').fadeOut();
+						if(clean_fields=='True'){
 							$("#id_first_name").val("");
 							$("#id_last_name").val("");
 							$("#id_email").val("");
 						}
-							
-				}else{				
-				$("#search_message").html("<li class='success'>Student ID Found</li>");
-				$("#id_needs_review").val(0);
+					}else{
+						$("#search_message").html("<li class='success'>Student ID Found</li>");
+						$("#id_needs_review").val(0);
 						$("#id_first_name").val(data[0][0]);
 						$("#id_last_name").val(data[0][1]);
 						$("#id_email").val(data[0][2]);		
 						jQuery('#overlay').fadeOut();
-				}
+					}
 				}	
+			});
+		} else if(email){
+			jQuery('#overlay').fadeIn();
+			$.ajax({
+				url	: "/scoresheet/GetStudentInfoFromEmail/"+encodeURIComponent(email)+"/",
+				success	: function(data){
+					if(data.length == 0){
+						email = $('#id_email').val();
+						$("#search_message").html("<li class='error'>NOT FOUND Email: "+email+"</li>");
+						$("#id_needs_review").val(1);
+						jQuery('#overlay').fadeOut();
+						if(clean_fields=='True'){
+								$("#id_first_name").val("");
+								$("#id_last_name").val("");
+								$("#id_sid").val("");
+							}
 								
-		});
+					}else{
+						$("#search_message").html("<li class='success'>Student Email Found</li>");
+						$("#id_needs_review").val(0);
+						$("#id_first_name").val(data[0][0]);
+						$("#id_last_name").val(data[0][1]);
+						$("#id_sid").val(data[0][2]);
+						jQuery('#overlay').fadeOut();
+					}
+				}
+			});
+		} else {
+			$("#search_message").html("<li class='warning'>Please provide a Student ID or Email to perform search</li>");
+		}
+
 		
 		
 	});
