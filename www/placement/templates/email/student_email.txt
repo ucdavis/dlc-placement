@@ -20,15 +20,12 @@ The DLC Staff
 
 Foreign Language Advisors:
 
-Language            Advisor               Email
-================================================================  
-Spanish             Vanessa Alvarez       vgalvarez@ucdavis.edu
-
-French, Italian     Amy Lowrey            allowrey@ucdavis.edu
-
-German, Russian     Lorenzo Zúñiga        lozuniga@ucdavis.edu
-
-Chinese, Japanese   Lauren Wong           lnawong@ucdavis.edu
+Language                               Advisor               Email
+===========================================================================
+Chinese, French                    Amy Lowrey            allowrey@ucdavis.edu
+German, Italian,
+Japanese, Portuguese,
+Russian, Spanish
 
 All other
-languages           Michael Mills         mwmills@ucdavis.edu
+languages                              Michael Mills         mwmills@ucdavis.edu
