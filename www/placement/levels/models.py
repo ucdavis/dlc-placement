@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 
 class PlacementLevels(models.Model):
-    id = models.AutoField(primary_key=True) # AutoField, skipped migration due to data starting at 0 causing reindex
+    id = models.AutoField(primary_key=True) # AutoField
     level = models.CharField(max_length=500)
     language_id = models.IntegerField()
     active = models.BooleanField(default = 1)
