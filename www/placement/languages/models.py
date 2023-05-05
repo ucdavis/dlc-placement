@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 
 # Create your models here.
 class Languages(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)  # AutoField
     name = models.CharField(max_length=32, unique=True)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
