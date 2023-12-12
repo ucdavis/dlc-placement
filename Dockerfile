@@ -19,6 +19,7 @@ ADD ./startup.sh /var/www/html
 
 COPY www  /var/www/html 
 WORKDIR /var/www/html
+RUN wget https://truststore.pki.rds.amazonaws.com/us-west-2/us-west-2-bundle.pem -O us-west-2-bundle.pem -q
 RUN chmod +x  ./startup.sh
 RUN pip install -r requirements.txt
 RUN mkdir /var/www/html/placement/temp
