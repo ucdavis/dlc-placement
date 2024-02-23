@@ -32,12 +32,12 @@
 				        
 				    	<span class="step-links">
 				        {% if scoresheet_list.has_previous %}		        
-				            <a class="btn btn-default" href="?{{ page_request_var }}={{ scoresheet_list.previous_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">previous</a>          
+				            <a class="btn btn-default" href="?{{ page_request_var }}={{ scoresheet_list.previous_page_number }}&language_id={{ request.GET.language_id }}&created_at={{ request.GET.created_at }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">previous</a>          
 				        {% endif %}
 				
 				
 				        {% if scoresheet_list.has_next %}
-				            <a class="btn btn-default"  href="?{{ page_request_var }}={{ scoresheet_list.next_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">next</a>
+				            <a class="btn btn-default"  href="?{{ page_request_var }}={{ scoresheet_list.next_page_number }}&language_id={{ request.GET.language_id }}&created_at={{ request.GET.created_at }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">next</a>
 				        {% endif %}
 				        
 				        <span>
@@ -64,6 +64,7 @@
 							<th>Language</th>
 							<th>Placement</th>
 							<th>Exam Date</th>
+							<th>PP Entered Date</th>
 							<th>Tester</th>
 							<th>Comments</th>
 							<th>Needs Review?</th>
@@ -82,6 +83,7 @@
 							<td>{{ scoresheet.language_name }}</td>
 							<td>{{ scoresheet.level }}</td>
 							<td>{{ scoresheet.exam_date }}</td>
+							<td>{{ scoresheet.created_at }}</td>
 							<td>{{ scoresheet.cas_user }}</td>
 							<td>{{ scoresheet.comments  }}</td>
 							<td class="checkbox-col">

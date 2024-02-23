@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import LanguageForm, StudentForm, LastNameForm
+from .forms import LanguageForm, EntryForm, StudentForm, LastNameForm
 from languages_users.models import LanguagesUsersView
 from languages.models import Languages
 
@@ -20,6 +20,8 @@ def SearchForm(request):
                     language_choices.append([data.id,data.name]) 
 # Form for language/period searching                             
             formLanguage =LanguageForm(request.GET or None,language_choices=language_choices)
+
+            formEntry = EntryForm(request.GET or None, language_choices = language_choices)
 # Form for last name searching       
             formLastName = LastNameForm(request.GET or None)
           
@@ -29,6 +31,7 @@ def SearchForm(request):
         
             context ={
                      'formLanguage' : formLanguage,
+                     'formEntry' : formEntry,
                      'formStudent' : formStudent,
                      'formLastName' : formLastName
                       }
