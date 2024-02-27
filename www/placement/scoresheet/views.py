@@ -49,9 +49,9 @@ def scoresheet_list(request):  # @ReservedAssignment
                                                     )
     elif (language_id_var and created_at):
         if ('is_tester' in request.session) and ('is_admin' not in request.session):     
-            scoresheet_list = ScoresheetView.objects.filter(language_id__exact=language_id_var, created_at__gte=created_at).order_by( '-exam_date')  # @UndefinedVariable
+            scoresheet_list = ScoresheetView.objects.filter(language_id__exact=language_id_var, created_at__gte=created_at).order_by( '-created_at')  # @UndefinedVariable
         elif('is_admin' in request.session) or ('is_advisor' in request.session):    
-            scoresheet_list = ScoresheetView.objects.filter(language_id__exact=language_id_var, created_at__gte=created_at).order_by( '-exam_date')  
+            scoresheet_list = ScoresheetView.objects.filter(language_id__exact=language_id_var, created_at__gte=created_at).order_by( '-created_at')  
 # search all from language                
     elif (language_id_var):
         scoresheet_list = ScoresheetView.objects.filter( language_id__exact = language_id_var)  # @UndefinedVariable
@@ -64,9 +64,9 @@ def scoresheet_list(request):  # @ReservedAssignment
  # search for scoresheet created_at
     elif (language_id_var=='' and created_at):
         if ('is_tester' in request.session) and ('is_admin' not in request.session):     
-            scoresheet_list = ScoresheetView.objects.filter(language_id__in=language_ids, created_at__gte=created_at).order_by( '-exam_date')  # @UndefinedVariable
+            scoresheet_list = ScoresheetView.objects.filter(language_id__in=language_ids, created_at__gte=created_at).order_by( '-created_at')  # @UndefinedVariable
         elif('is_admin' in request.session) or ('is_advisor' in request.session):    
-            scoresheet_list = ScoresheetView.objects.filter(created_at__gte=created_at).order_by( '-exam_date')    # @UndefinedVariable
+            scoresheet_list = ScoresheetView.objects.filter(created_at__gte=created_at).order_by( '-created_at')    # @UndefinedVariable
 # search all for student last name     
     elif ( last_name ):
         if ('is_tester' in request.session) and ('is_admin' not in request.session):             
