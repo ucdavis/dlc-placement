@@ -193,6 +193,6 @@ def GetUserLDAP( request=False, uid=None ):
             user_data['department']=data[1]['ou'][0]
         return HttpResponse(json.dumps(user_data) , content_type="application/json")
          
-    except ldap.LDAPError, error:
-        print 'Problems with ldap',error
+    except ldap.LDAPError as error:
+        print('Problems with ldap',error)
         return False

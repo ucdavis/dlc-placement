@@ -1,9 +1,8 @@
-FROM python:2.7
+FROM python:3.7-buster
 RUN apt-get update
 RUN apt-get install -y apt-utils curl apache2 apache2-utils
-RUN apt-get -y install libapache2-mod-wsgi
-RUN apt-get -y install python-pip
-RUN apt-get -y install libsasl2-dev python-dev libldap2-dev libssl-dev
+RUN apt-get -y install libapache2-mod-wsgi-py3=4.6.5-1
+RUN apt-get -y install libsasl2-dev python3-dev libldap2-dev libssl-dev
 RUN apt-get install -y libaio1 wget unzip
 WORKDIR /opt/oracle
 RUN wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-linuxx64.zip && \

@@ -563,7 +563,7 @@ def GetEmailLDAP(request=False, sid=None):
             else:
                 student_data['email']=""
         return student_data 
-    except ldap.LDAPError, error:
+    except ldap.LDAPError as error:
         print ("Problems connecting with ldap "),error
         return False    
 
