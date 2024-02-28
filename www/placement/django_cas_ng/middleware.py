@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import login, logout
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from .views import login as cas_login, logout as cas_logout
 
@@ -23,7 +23,7 @@ class CASMiddleware(object):
         """Checks that the authentication middleware is installed"""
 
         error = ("The Django CAS middleware requires authentication "
-                 "middleware to be installed. Edit your MIDDLEWARE_CLASSES "
+                 "middleware to be installed. Edit your MIDDLEWARE "
                  "setting to insert 'django.contrib.auth.middleware."
                  "AuthenticationMiddleware'.")
         assert hasattr(request, 'user'), error
@@ -45,7 +45,7 @@ class CASMiddleware(object):
         elif not view_func.__module__.startswith('django.contrib.admin.'):
             return None
 
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             if request.user.is_staff:
                 return None
             else:

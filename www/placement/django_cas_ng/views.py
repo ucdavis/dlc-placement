@@ -47,7 +47,7 @@ def login(request, next_page=None, required=False):
         clean_sessions(client, request)
         return HttpResponseRedirect(next_page)
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if settings.CAS_LOGGED_MSG is not None:
             message = settings.CAS_LOGGED_MSG % request.user.get_username()
             messages.success(request, message)

@@ -22,7 +22,8 @@ class ProxyGrantingTicket(models.Model):
         settings.AUTH_USER_MODEL,
         related_name="+",
         null=True,
-        blank=True
+        blank=True,
+        on_delete=models.CASCADE,
     )
     pgtiou = models.CharField(max_length=255, null=True, blank=True)
     pgt = models.CharField(max_length=255, null=True, blank=True)
@@ -33,7 +34,7 @@ class ProxyGrantingTicket(models.Model):
         for pgt in cls.objects.all():
             session = SessionStore(session_key=pgt.session_key)
             user = get_user_from_session(session)
-            if not user.is_authenticated():
+            if not user.is_authenticated:
                 pgt.delete()
 
     @classmethod
@@ -72,5 +73,5 @@ class SessionTicket(models.Model):
         for st in cls.objects.all():
             session = SessionStore(session_key=st.session_key)
             user = get_user_from_session(session)
-            if not user.is_authenticated():
+            if not user.is_authenticated:
                 st.delete()
