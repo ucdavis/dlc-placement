@@ -125,11 +125,11 @@ if not settings.DEBUG:
             'PASSWORD': os.environ['DB_PASSWORD'],
             'HOST': os.environ['DB_HOST'],
             'PORT': os.environ['DB_PORT'],
-            'OPTIONS': {
-                'ssl': {
-                    'ca': '/var/www/html/us-west-2-bundle.pem'
-                }
-            }
+            # 'OPTIONS': {
+            #     'ssl': {
+            #         'ca': '/var/www/html/us-west-2-bundle.pem'
+            #     }
+            # }
         },
         'production': {
             'ENGINE': 'django.db.backends.mysql',

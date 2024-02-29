@@ -77,16 +77,16 @@ def scoresheet_list(request):  # @ReservedAssignment
         writer.writerow(['Student ID', 'First Name', 'Last Name', 'E-mail', 'Language', 'Placement', 'Exam Date', 'Tester', 'Comments', 'Needs Review'])
         for scoresheet in scoresheet_list:
             writer.writerow([scoresheet.sid,
-                             scoresheet.first_name.encode('utf-8'),
-                             scoresheet.last_name.encode('utf-8'),
-                             scoresheet.email.encode('utf-8'),
-                             scoresheet.language_name,                                 
-                             scoresheet.level.encode('utf-8'),
-                             scoresheet.exam_date,                                
-                             scoresheet.cas_user.encode('utf-8'),
-                             scoresheet.comments.encode('utf-8'),
-                             scoresheet.needs_review ])
-        return response 
+                             scoresheet.first_name,
+                             scoresheet.last_name,
+                             scoresheet.email,
+                             scoresheet.language_name,
+                             scoresheet.level,
+                             scoresheet.exam_date,
+                             scoresheet.cas_user,
+                             scoresheet.comments,
+                             scoresheet.needs_review])
+        return response
      
         context = {
                "title" : title,
@@ -161,7 +161,7 @@ def scoresheet_create(request):
                                                          Q(sid__exact = instance.sid)&
                                                          Q(level_id = instance.placement_level_id)
                                                          )
-            context = Context({
+            context = {
                        "full_name" : form.cleaned_data['first_name']+" "+form.cleaned_data['last_name'],
                        "first_name" : form.cleaned_data['first_name'],
                        "last_name" : form.cleaned_data['last_name'],
@@ -171,7 +171,7 @@ def scoresheet_create(request):
                        "email" : form.cleaned_data['email'],
                        "placement_level" : placement_level,
                        "queryset_checker" : duplicated_checker           
-                       })
+                       }
                         
 # If scoresheet is not duplicated send confirmation email to student
             EMAIL_FAIL_SILENTLY=False
@@ -360,7 +360,7 @@ def scoresheet_bulk_input(request):
                             if(os.environ['EMAIL_FAIL_SILENTLY'] == "True"):
                                 EMAIL_FAIL_SILENTLY=True
 
-                            context = Context({
+                            context = {
                                        "full_name" : instance.first_name + " " +instance.last_name,
                                        "first_name" : instance.first_name,
                                        "last_name" : instance.last_name,
@@ -370,7 +370,7 @@ def scoresheet_bulk_input(request):
                                        "email" : instance.email,
                                        "placement_level" : placement_level,
                                        "queryset_checker" : duplicated_checker
-                                       })
+                                       }
 
                             # If scoresheet was duplicated add a warning to message and send email to administrators
                             if (duplicated_checker.count() >= 2):
@@ -442,7 +442,7 @@ def scoresheet_detail(request, id=None):  # @ReservedAssignment
     tester = Users.objects.get(id=scoresheet.tester_id)  # @UndefinedVariable
     
     if (request.GET.get('email')):
-        context = Context({
+        context = {
                        "full_name" : scoresheet.first_name +" "+ scoresheet.last_name,
                        "first_name" : scoresheet.first_name,
                        "last_name" : scoresheet.last_name,
@@ -451,7 +451,7 @@ def scoresheet_detail(request, id=None):  # @ReservedAssignment
                        "exam_date" : scoresheet.exam_date,
                        "email" : scoresheet.email,
                        "placement_level" : placement,                   
-                       })
+                       }
     # Send Email to student
         EMAIL_FAIL_SILENTLY=False
         if(os.environ['EMAIL_FAIL_SILENTLY'] == "True"):

@@ -2,7 +2,7 @@ from cas import CASClient
 from django.conf import settings as django_settings
 from django.contrib.auth import REDIRECT_FIELD_NAME, SESSION_KEY, BACKEND_SESSION_KEY, load_backend
 from django.contrib.auth.models import AnonymousUser
-from django.utils.six.moves import urllib_parse
+from urllib.parse import urlencode, urlunparse
 
 
 def get_protocol(request):
@@ -23,7 +23,7 @@ def get_redirect_url(request):
             next_ = django_settings.CAS_REDIRECT_URL
         else:
             next_ = request.META.get('HTTP_REFERER', django_settings.CAS_REDIRECT_URL)
-        prefix = urllib_parse.urlunparse(
+        prefix = urlunparse(
             (get_protocol(request), request.get_host(), '', '', '', ''),
         )
         if next_.startswith(prefix):
@@ -35,14 +35,14 @@ def get_service_url(request, redirect_to=None):
     """Generates application django service URL for CAS"""
     protocol = get_protocol(request)
     host = request.get_host()
-    service = urllib_parse.urlunparse(
+    service = urlunparse(
         (protocol, host, request.path, '', '', ''),
     )
     if '?' in service:
         service += '&'
     else:
         service += '?'
-    service += urllib_parse.urlencode({
+    service += urlencode({
         REDIRECT_FIELD_NAME: redirect_to or get_redirect_url(request)
     })
     return service

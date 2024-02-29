@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
-from django.utils.six.moves import urllib_parse
+from urllib.parse import urlunparse
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.http import HttpResponse
@@ -121,7 +121,7 @@ def logout(request, next_page=None):
     if settings.CAS_LOGOUT_COMPLETELY:
         protocol = get_protocol(request)
         host = request.get_host()
-        redirect_url = urllib_parse.urlunparse(
+        redirect_url = urlunparse(
             (protocol, host, next_page, '', '', ''),
         )
         client = get_cas_client()
