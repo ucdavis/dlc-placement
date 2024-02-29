@@ -123,12 +123,12 @@
 			        
 			    	<span class="step-links">
 			        {% if scoresheet_list.has_previous %}		        
-			            <a class="btn btn-default" href="?{{ page_request_var }}={{ scoresheet_list.previous_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">previous</a>          
+			            <a class="btn btn-default" href="?{{ page_request_var }}={{ scoresheet_list.previous_page_number }}&language_id={{ request.GET.language_id }}&created_at={{ request.GET.created_at }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">previous</a>          
 			        {% endif %}
 			
 			
 			        {% if scoresheet_list.has_next %}
-			            <a class="btn btn-default"  href="?{{ page_request_var }}={{ scoresheet_list.next_page_number }}&language_id={{ request.GET.language_id }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">next</a>
+			            <a class="btn btn-default"  href="?{{ page_request_var }}={{ scoresheet_list.next_page_number }}&language_id={{ request.GET.language_id }}&created_at={{ request.GET.created_at }}&start_date={{ request.GET.start_date}}&end_date={{ request.GET.end_date}}&last_name={{ request.GET.last_name }}&sid={{ request.GET.sid }}">next</a>
 			        {% endif %}
 			        
 			        
