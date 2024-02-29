@@ -1,15 +1,15 @@
-from django.conf.urls import url
+from django.urls import re_path
 from . import views
  
  
 urlpatterns = [
-    url(r'^validate/$', views.validate_user, name="validate"),
-    url(r'^$', views.users_list, name="list"),
-    url(r'^inactive/$', views.users_inactive, name="inactive"),
-    url(r'^create$', views.users_create, name="create"),
-    url(r'^(?P<id>\d+)/detail/$', views.users_detail, name="detail"),
-    url(r'^account/$', views.users_account, name="account"),
-    url(r'^(?P<id>\d+)/edit/$', views.users_update, name="edit"),
-    url(r'^validate/', views.validate_user, name= "validate"),
-    url(r'^GetUserLDAP/(?P<uid>\w+)/$', views.GetUserLDAP, name='get_user_ldap'),
+    re_path(r'^validate/$', views.validate_user, name="validate"),
+    re_path(r'^$', views.users_list, name="list"),
+    re_path(r'^inactive/$', views.users_inactive, name="inactive"),
+    re_path(r'^create$', views.users_create, name="create"),
+    re_path(r'^(?P<id>\d+)/detail/$', views.users_detail, name="detail"),
+    re_path(r'^account/$', views.users_account, name="account"),
+    re_path(r'^(?P<id>\d+)/edit/$', views.users_update, name="edit"),
+    re_path(r'^validate/', views.validate_user, name= "validate"),
+    re_path(r'^GetUserLDAP/(?P<uid>\w+)/$', views.GetUserLDAP, name='get_user_ldap'),
 ]

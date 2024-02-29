@@ -1,4 +1,4 @@
-FROM python:3.7-buster
+FROM python:3.11-bookworm
 RUN apt-get update
 RUN apt-get install -y apt-utils curl apache2 apache2-utils
 RUN apt-get -y install libapache2-mod-wsgi-py3
