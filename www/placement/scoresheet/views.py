@@ -18,8 +18,7 @@ from django.template import loader, Context
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 import os
-import cx_Oracle
-
+import oracledb
 
 global title
 title = "Scoresheets"
@@ -574,10 +573,11 @@ def GetStudentBanner(request=False, sid=None, formatted=None):
     host = os.environ["BANNER_HOST"]
     port = os.environ["BANNER_PORT"]
     db = os.environ["BANNER_DB"]
-    dsn = cx_Oracle.makedsn (host, port, db)  # @UndefinedVariable
-    
+
     # Connect to Oracle
-    con = cx_Oracle.connect(user, pswd, dsn)  # @UndefinedVariable
+    oracledb.init_oracle_client() # thick mode
+    dsn = oracledb.makedsn (host, port, db)  # @UndefinedVariable
+    con = oracledb.connect(user=user, password=pswd, dsn=dsn)  # @UndefinedVariable
     cur = con.cursor()
     if (con):
         cur.prepare("SELECT SPRIDEN_FIRST_NAME, SPRIDEN_LAST_NAME FROM SPRIDEN WHERE SPRIDEN_ID = :sid AND SPRIDEN_CHANGE_IND IS NULL")
