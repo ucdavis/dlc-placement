@@ -628,8 +628,11 @@ def GetStudentInfoFromEmail(request=False, email=None, formatted='json'):
         host = os.environ["BANNER_HOST"]
         port = os.environ["BANNER_PORT"]
         db = os.environ["BANNER_DB"]
-        dsn = cx_Oracle.makedsn (host, port, db)
-        con = cx_Oracle.connect(user, pswd, dsn)
+
+        oracledb.init_oracle_client() # thick mode
+        dsn = oracledb.makedsn (host, port, db)
+        con = oracledb.connect(user=user, password=pswd, dsn=dsn)
+
         cur = con.cursor()
         if (con):
             cur.prepare("SELECT GOREMAL_PIDM FROM GOREMAL WHERE GOREMAL_EMAIL_ADDRESS = :email AND GOREMAL_EMAL_CODE = 'UCD'")
