@@ -11,5 +11,5 @@ urlpatterns = [
     re_path(r'^account/$', views.users_account, name="account"),
     re_path(r'^(?P<id>\d+)/edit/$', views.users_update, name="edit"),
     re_path(r'^validate/', views.validate_user, name= "validate"),
-    re_path(r'^GetUserLDAP/(?P<uid>\w+)/$', views.GetUserLDAP, name='get_user_ldap'),
+    re_path(r'^GetUserIAM/(?P<uid>\w+)/$', views.GetUserIAM, name='get_user_iam'),
 ]

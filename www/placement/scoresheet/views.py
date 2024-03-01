@@ -12,13 +12,14 @@ import csv
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
-import ldap
 from django.contrib import messages
 from django.template import loader, Context
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 import os
 import oracledb
+from utils.iam_client import IAMClient
+
 
 global title
 title = "Scoresheets"
@@ -304,11 +305,9 @@ def scoresheet_bulk_input(request):
                         student_data = GetStudentBanner(sid=student_id, formatted='dictionary')
                         if 'email' in student_data:
                             student_email = student_data['email']
-                        # if email is null looks for it in LDAP
+                        # if email is null looks for it in IAM
                         if(student_email ==''):
-                            LDAPemail= GetEmailLDAP(sid=student_id)
-                            if('email' in LDAPemail):
-                                student_email = LDAPemail['email']
+                            student_email = GetEmailIAM(sid=student_id)
                     else:
                         student_id = ''
                         student_email = scoresheet_data['id']
@@ -542,29 +541,9 @@ def scoresheet_delete(request, id, template_name='scoresheet_confirm_delete.html
     else:
         return redirect('home')
     
-def GetEmailLDAP(request=False, sid=None):
-    # LDAP query        
-    server = os.environ["LDAP_SERVER"]
-    base = os.environ["LDAP_BASE"]
-    username = os.environ['LDAP_USER']
-    password = os.environ["LDAP_PASS"]
-    searchFilter = "(ucdStudentSID="+sid+")"
- 
-    try:
-        l = ldap.initialize(server)
-        l.protocol_version = ldap.VERSION3
-        l.simple_bind_s(username,password)          
-        result= l.search_s(base, ldap.SCOPE_SUBTREE, searchFilter)
-        student_data={}
-        for data in result:
-            if('mail' in data):
-                student_data['email']=data[1]['mail'][0]
-            else:
-                student_data['email']=""
-        return student_data 
-    except ldap.LDAPError as error:
-        print ("Problems connecting with ldap "),error
-        return False    
+def GetEmailIAM(request=False, sid=None):
+    iam = IAMClient()
+    return iam.get_email_by_student_id(sid=sid)
 
 def GetStudentBanner(request=False, sid=None, formatted=None):
     # Build connection string
@@ -596,9 +575,7 @@ def GetStudentBanner(request=False, sid=None, formatted=None):
             if result3:
                 email = result3[0][0]
             else:
-                if(GetEmailLDAP(sid=sid)):
-                    LDAPemail=GetEmailLDAP(sid=sid)           
-                    email = LDAPemail['email']             
+                email = GetEmailIAM(sid=sid)
         else:
             pidm = ""    
       
