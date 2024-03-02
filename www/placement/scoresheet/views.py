@@ -29,6 +29,7 @@ def scoresheet_list(request):  # @ReservedAssignment
     language_id_var =request.GET.get("language_id")
     start_date = request.GET.get("start_date")
     end_date = request.GET.get("end_date")
+    created_at = request.GET.get("created_at")
     last_name = request.GET.get("last_name")
     sid = request.GET.get('sid')
 
@@ -46,6 +47,11 @@ def scoresheet_list(request):  # @ReservedAssignment
                                                     Q(language_id__exact = language_id_var)&
                                                     Q(exam_date__range=[start_date, end_date]) 
                                                     )
+    elif (language_id_var and created_at):
+        if ('is_tester' in request.session) and ('is_admin' not in request.session):     
+            scoresheet_list = ScoresheetView.objects.filter(language_id__exact=language_id_var, created_at__gte=created_at).order_by( '-created_at')  # @UndefinedVariable
+        elif('is_admin' in request.session) or ('is_advisor' in request.session):    
+            scoresheet_list = ScoresheetView.objects.filter(language_id__exact=language_id_var, created_at__gte=created_at).order_by( '-created_at')  
 # search all from language                
     elif (language_id_var):
         scoresheet_list = ScoresheetView.objects.filter( language_id__exact = language_id_var)  # @UndefinedVariable
@@ -55,7 +61,12 @@ def scoresheet_list(request):  # @ReservedAssignment
             scoresheet_list = ScoresheetView.objects.filter(language_id__in=language_ids, exam_date__range=[start_date, end_date]).order_by( '-exam_date')  # @UndefinedVariable
         elif('is_admin' in request.session) or ('is_advisor' in request.session):    
             scoresheet_list = ScoresheetView.objects.filter(exam_date__range=[start_date, end_date]).order_by( '-exam_date')    # @UndefinedVariable
- 
+ # search for scoresheet created_at
+    elif (language_id_var=='' and created_at):
+        if ('is_tester' in request.session) and ('is_admin' not in request.session):     
+            scoresheet_list = ScoresheetView.objects.filter(language_id__in=language_ids, created_at__gte=created_at).order_by( '-created_at')  # @UndefinedVariable
+        elif('is_admin' in request.session) or ('is_advisor' in request.session):    
+            scoresheet_list = ScoresheetView.objects.filter(created_at__gte=created_at).order_by( '-created_at')    # @UndefinedVariable
 # search all for student last name     
     elif ( last_name ):
         if ('is_tester' in request.session) and ('is_admin' not in request.session):             
@@ -74,7 +85,7 @@ def scoresheet_list(request):  # @ReservedAssignment
         response['Content-Disposition'] = 'attachment; filename="Placement_Report.csv"'
      
         writer = csv.writer(response)
-        writer.writerow(['Student ID', 'First Name', 'Last Name', 'E-mail', 'Language', 'Placement', 'Exam Date', 'Tester', 'Comments', 'Needs Review'])
+        writer.writerow(['Student ID', 'First Name', 'Last Name', 'E-mail', 'Language', 'Placement', 'Exam Date', 'PP Entered Date', 'Tester', 'Comments', 'Needs Review'])
         for scoresheet in scoresheet_list:
             writer.writerow([scoresheet.sid,
                              scoresheet.first_name,
@@ -83,6 +94,7 @@ def scoresheet_list(request):  # @ReservedAssignment
                              scoresheet.language_name,
                              scoresheet.level,
                              scoresheet.exam_date,
+                             scoresheet.created_at,
                              scoresheet.cas_user,
                              scoresheet.comments,
                              scoresheet.needs_review])

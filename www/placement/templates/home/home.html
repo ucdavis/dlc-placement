@@ -102,7 +102,7 @@
 
 <!-- Panel Search by language -->
 <div class="panel panel-warning">
-	<div class="panel-heading"><h1 class="panel-title">Search by Language and Period</h1></div>
+	<div class="panel-heading"><h1 class="panel-title">Search by Language and Exam Date</h1></div>
 	<div class="panel-body">
 		
 		<div class="row">
@@ -143,9 +143,47 @@
 	</div> <!-- panel-body -->
 </div> <!-- panel -->
 
+<!-- Panel Search by entered date -->
+<div class="panel panel-warning">
+	<div class="panel-heading"><h1 class="panel-title">Search by Language and PP Entered Date</h1></div>
+	<div class="panel-body">
+		
+		<div class="row">
+			<div class="col-sm-6">
+					<form action="/scoresheet/list/" method="get">
+					    {% csrf_token %}
+					    {{ formEntry|crispy }}
+					    <input class="btn btn-primary btn-sm"  type="submit" value="Search"/>
+					    <input class="btn btn-primary btn-sm"  type="submit" value="Download CSV" name='csv'/>
+					</form>
+			</div>
+			
+			<div class="col-sm-6">
 
-
-
-
+					<div>
+						<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<p class="bg-warning">&#9727; &nbsp;Instructions</p>
+						</a>	
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<ul>
+					        <li>
+					            <span class="question">Searching by language:</span>
+					            <ol>
+					                <li>Use drop down menu to select language of choice. (Optional)</li>
+					                <li>Click on the date field and use the calendar tool to pick your starting date.</li>
+					                <li>Select "Search" to show the result on the screen or "Download CSV" to download a spread sheet file report.</li>
+					            </ol>
+					        </li>					        
+					    </ul>
+					    <hr>
+					</div>
+				
+			</div>		
+		</div> 
+		
+								
+	</div> <!-- panel-body -->
+</div> <!-- panel -->
 
 {% endblock %}

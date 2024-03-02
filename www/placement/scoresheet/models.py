@@ -44,6 +44,7 @@ class ScoresheetView(models.Model):
     level_id = models.IntegerField()
     level = CharField(max_length=500)
     exam_date = models.DateField()
+    created_at = models.DateField()
     language_id = models.IntegerField()
     language_name = models.CharField(max_length=255, null=True)
     needs_review = models.BooleanField(default=0)
