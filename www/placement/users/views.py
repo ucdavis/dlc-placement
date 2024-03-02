@@ -6,10 +6,10 @@ from django.http import HttpResponseRedirect
 from languages_users.models import LanguagesUsers, LanguagesUsersView
 from languages_users.forms import LanguagesUsersForm
 from django import forms
-import ldap
 import json
 from django.http.response import HttpResponse
 import os
+from utils.iam_client import IAMClient
 
 # Create your views here.
 
@@ -172,27 +172,7 @@ def users_update(request, id=None):  # @ReservedAssignment
         return redirect("home")
     
 
-def GetUserLDAP( request=False, uid=None ):
-    # LDAP query      
-    server = os.environ["LDAP_SERVER"]
-    base = os.environ["LDAP_BASE"]
-    username = os.environ['LDAP_USER']
-    password = os.environ["LDAP_PASS"]
-    searchFilter = "(uid="+str(uid)+")"
- 
-    try:                 
-        l = ldap.initialize(server)
-        l.protocol_version = ldap.VERSION3
-        l.simple_bind_s(username,password)          
-        result= l.search_s(base, ldap.SCOPE_SUBTREE, searchFilter)
-        user_data={}
-        for data in result:
-            user_data['first_name']=data[1]['givenName'][0]
-            user_data['last_name']=data[1]['sn'][0]
-            user_data['email']=data[1]['mail'][0]
-            user_data['department']=data[1]['ou'][0]
-        return HttpResponse(json.dumps(user_data) , content_type="application/json")
-         
-    except ldap.LDAPError, error:
-        print 'Problems with ldap',error
-        return False
+def GetUserIAM(request=False, uid=None):
+    iam = IAMClient()
+    user = iam.get_user_by_login(login=uid)
+    return HttpResponse(json.dumps(user), content_type="application/json")

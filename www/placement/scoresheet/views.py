@@ -12,13 +12,13 @@ import csv
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
-import ldap
 from django.contrib import messages
 from django.template import loader, Context
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 import os
-import cx_Oracle
+import oracledb
+from utils.iam_client import IAMClient
 
 
 global title
@@ -88,17 +88,17 @@ def scoresheet_list(request):  # @ReservedAssignment
         writer.writerow(['Student ID', 'First Name', 'Last Name', 'E-mail', 'Language', 'Placement', 'Exam Date', 'PP Entered Date', 'Tester', 'Comments', 'Needs Review'])
         for scoresheet in scoresheet_list:
             writer.writerow([scoresheet.sid,
-                             scoresheet.first_name.encode('utf-8'),
-                             scoresheet.last_name.encode('utf-8'),
-                             scoresheet.email.encode('utf-8'),
-                             scoresheet.language_name,                                 
-                             scoresheet.level.encode('utf-8'),
-                             scoresheet.exam_date,                                
+                             scoresheet.first_name,
+                             scoresheet.last_name,
+                             scoresheet.email,
+                             scoresheet.language_name,
+                             scoresheet.level,
+                             scoresheet.exam_date,
                              scoresheet.created_at,
-                             scoresheet.cas_user.encode('utf-8'),
-                             scoresheet.comments.encode('utf-8'),
-                             scoresheet.needs_review ])
-        return response 
+                             scoresheet.cas_user,
+                             scoresheet.comments,
+                             scoresheet.needs_review])
+        return response
      
         context = {
                "title" : title,
@@ -173,7 +173,7 @@ def scoresheet_create(request):
                                                          Q(sid__exact = instance.sid)&
                                                          Q(level_id = instance.placement_level_id)
                                                          )
-            context = Context({
+            context = {
                        "full_name" : form.cleaned_data['first_name']+" "+form.cleaned_data['last_name'],
                        "first_name" : form.cleaned_data['first_name'],
                        "last_name" : form.cleaned_data['last_name'],
@@ -183,7 +183,7 @@ def scoresheet_create(request):
                        "email" : form.cleaned_data['email'],
                        "placement_level" : placement_level,
                        "queryset_checker" : duplicated_checker           
-                       })
+                       }
                         
 # If scoresheet is not duplicated send confirmation email to student
             EMAIL_FAIL_SILENTLY=False
@@ -317,11 +317,9 @@ def scoresheet_bulk_input(request):
                         student_data = GetStudentBanner(sid=student_id, formatted='dictionary')
                         if 'email' in student_data:
                             student_email = student_data['email']
-                        # if email is null looks for it in LDAP
+                        # if email is null looks for it in IAM
                         if(student_email ==''):
-                            LDAPemail= GetEmailLDAP(sid=student_id)
-                            if('email' in LDAPemail):
-                                student_email = LDAPemail['email']
+                            student_email = GetEmailIAM(sid=student_id)
                     else:
                         student_id = ''
                         student_email = scoresheet_data['id']
@@ -372,7 +370,7 @@ def scoresheet_bulk_input(request):
                             if(os.environ['EMAIL_FAIL_SILENTLY'] == "True"):
                                 EMAIL_FAIL_SILENTLY=True
 
-                            context = Context({
+                            context = {
                                        "full_name" : instance.first_name + " " +instance.last_name,
                                        "first_name" : instance.first_name,
                                        "last_name" : instance.last_name,
@@ -382,7 +380,7 @@ def scoresheet_bulk_input(request):
                                        "email" : instance.email,
                                        "placement_level" : placement_level,
                                        "queryset_checker" : duplicated_checker
-                                       })
+                                       }
 
                             # If scoresheet was duplicated add a warning to message and send email to administrators
                             if (duplicated_checker.count() >= 2):
@@ -454,7 +452,7 @@ def scoresheet_detail(request, id=None):  # @ReservedAssignment
     tester = Users.objects.get(id=scoresheet.tester_id)  # @UndefinedVariable
     
     if (request.GET.get('email')):
-        context = Context({
+        context = {
                        "full_name" : scoresheet.first_name +" "+ scoresheet.last_name,
                        "first_name" : scoresheet.first_name,
                        "last_name" : scoresheet.last_name,
@@ -463,7 +461,7 @@ def scoresheet_detail(request, id=None):  # @ReservedAssignment
                        "exam_date" : scoresheet.exam_date,
                        "email" : scoresheet.email,
                        "placement_level" : placement,                   
-                       })
+                       }
     # Send Email to student
         EMAIL_FAIL_SILENTLY=False
         if(os.environ['EMAIL_FAIL_SILENTLY'] == "True"):
@@ -555,29 +553,9 @@ def scoresheet_delete(request, id, template_name='scoresheet_confirm_delete.html
     else:
         return redirect('home')
     
-def GetEmailLDAP(request=False, sid=None):
-    # LDAP query        
-    server = os.environ["LDAP_SERVER"]
-    base = os.environ["LDAP_BASE"]
-    username = os.environ['LDAP_USER']
-    password = os.environ["LDAP_PASS"]
-    searchFilter = "(ucdStudentSID="+sid+")"
- 
-    try:
-        l = ldap.initialize(server)
-        l.protocol_version = ldap.VERSION3
-        l.simple_bind_s(username,password)          
-        result= l.search_s(base, ldap.SCOPE_SUBTREE, searchFilter)
-        student_data={}
-        for data in result:
-            if('mail' in data):
-                student_data['email']=data[1]['mail'][0]
-            else:
-                student_data['email']=""
-        return student_data 
-    except ldap.LDAPError, error:
-        print ("Problems connecting with ldap "),error
-        return False    
+def GetEmailIAM(request=False, sid=None):
+    iam = IAMClient()
+    return iam.get_email_by_student_id(sid=sid)
 
 def GetStudentBanner(request=False, sid=None, formatted=None):
     # Build connection string
@@ -586,10 +564,11 @@ def GetStudentBanner(request=False, sid=None, formatted=None):
     host = os.environ["BANNER_HOST"]
     port = os.environ["BANNER_PORT"]
     db = os.environ["BANNER_DB"]
-    dsn = cx_Oracle.makedsn (host, port, db)  # @UndefinedVariable
-    
+
     # Connect to Oracle
-    con = cx_Oracle.connect(user, pswd, dsn)  # @UndefinedVariable
+    oracledb.init_oracle_client() # thick mode
+    dsn = oracledb.makedsn (host, port, db)  # @UndefinedVariable
+    con = oracledb.connect(user=user, password=pswd, dsn=dsn)  # @UndefinedVariable
     cur = con.cursor()
     if (con):
         cur.prepare("SELECT SPRIDEN_FIRST_NAME, SPRIDEN_LAST_NAME FROM SPRIDEN WHERE SPRIDEN_ID = :sid AND SPRIDEN_CHANGE_IND IS NULL")
@@ -608,9 +587,7 @@ def GetStudentBanner(request=False, sid=None, formatted=None):
             if result3:
                 email = result3[0][0]
             else:
-                if(GetEmailLDAP(sid=sid)):
-                    LDAPemail=GetEmailLDAP(sid=sid)           
-                    email = LDAPemail['email']             
+                email = GetEmailIAM(sid=sid)
         else:
             pidm = ""    
       
@@ -640,8 +617,11 @@ def GetStudentInfoFromEmail(request=False, email=None, formatted='json'):
         host = os.environ["BANNER_HOST"]
         port = os.environ["BANNER_PORT"]
         db = os.environ["BANNER_DB"]
-        dsn = cx_Oracle.makedsn (host, port, db)
-        con = cx_Oracle.connect(user, pswd, dsn)
+
+        oracledb.init_oracle_client() # thick mode
+        dsn = oracledb.makedsn (host, port, db)
+        con = oracledb.connect(user=user, password=pswd, dsn=dsn)
+
         cur = con.cursor()
         if (con):
             cur.prepare("SELECT GOREMAL_PIDM FROM GOREMAL WHERE GOREMAL_EMAIL_ADDRESS = :email AND GOREMAL_EMAL_CODE = 'UCD'")

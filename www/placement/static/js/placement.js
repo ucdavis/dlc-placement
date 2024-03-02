@@ -104,7 +104,7 @@ $(document).ready(function(){
 		clean_fields = $(this).attr('clean_fields');
 		uid = $("#id_cas_user").val();
 		$.ajax({
-			url	: "/users/GetUserLDAP/"+ uid +"/",
+			url	: "/users/GetUserIAM/"+ uid +"/",
 
 			success	: function(data){
 

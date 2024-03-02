@@ -5,8 +5,6 @@ from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from django.http import HttpResponse
 
-from django.utils import six
-
 """ A simple python package for turning django models into csvs """
 
 # Keyword arguments that will be used by this module
@@ -58,7 +56,7 @@ def write_csv(queryset, file_obj, **kwargs):
 
     csv_kwargs = {}
 
-    for key, val in six.iteritems(kwargs):
+    for key, val in kwargs.items():
         if key not in DJQSCSV_KWARGS:
             csv_kwargs[key] = val
 
@@ -191,7 +189,7 @@ def _sanitize_unicode_record(field_serializer_map, record):
             return unicode(value)
 
     obj = {}
-    for key, val in six.iteritems(record):
+    for key, val in record.items():
         if val is not None:
             serializer = field_serializer_map.get(key, _serialize_value)
             newval = serializer(val)

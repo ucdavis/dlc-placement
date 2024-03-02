@@ -6,20 +6,20 @@
   <body>
     Dear {{ full_name }},
     <p>
-    Thank you for taking the {{ language }} Language Placement Evaluation. Your results have been added to our foreign language database which is accessible to the Dean's Office but keep this email for your records. Below is the evaluation report:
+    Thank you for taking the {{ language.name }} Language Placement Evaluation. Your results have been added to our foreign language database which is accessible to the Dean's Office but keep this email for your records. Below is the evaluation report:
     </p>
     <p>
     Student Name: {{ last_name }}, {{ first_name }}<br />
     Student ID: {{ sid }}<br />
     Tested On: {{ exam_date }}<br />
-    Placed Into: {{ placement_level }}<br />
+    Placed Into: {{ placement_level.level }}<br />
     </p>
     <p>
-    <span style="text-decoration:underline">Continuing language students:</span>  If you are registered in or wait-listed in a {{ language }} language class which is not consistent with the course you are placed into, please switch to the course indicated above or speak with the {{ language }} language advisor listed below.
+    <span style="text-decoration:underline">Continuing language students:</span>  If you are registered in or wait-listed in a {{ language.name }} language class which is not consistent with the course you are placed into, please switch to the course indicated above or speak with the {{ language.name }} language advisor listed below.
     <em>If you have been placed into Level 1 of a language that you successfully completed the second or third year in the tenth grade or higher grade in high school you may receive unit credit for the course of that language but the grading mode will be P/NP only.</em>  Speak with the language advisor listed below if you have concerns or questions.  Placement into a language course does not guarantee you space in the class.
     </p>
     <p>
-    <span style="text-decoration:underline">Fulfilling the Foreign Language Requirement:</span>  This letter verifies that you have completed the {{ language }} placement exam listed above.  For information about whether or not you have satisfied a Foreign Language requirement, please consult your major or college advisor.
+    <span style="text-decoration:underline">Fulfilling the Foreign Language Requirement:</span>  This letter verifies that you have completed the {{ language.name }} placement exam listed above.  For information about whether or not you have satisfied a Foreign Language requirement, please consult your major or college advisor.
     </p>
     <p>
     Best wishes for your language learning.

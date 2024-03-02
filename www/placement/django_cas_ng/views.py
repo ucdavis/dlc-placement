@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
-from django.utils.six.moves import urllib_parse
+from urllib.parse import urlunparse
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.http import HttpResponse
@@ -15,7 +15,7 @@ from django.contrib.auth import (
     authenticate
 )
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from importlib import import_module
@@ -47,7 +47,7 @@ def login(request, next_page=None, required=False):
         clean_sessions(client, request)
         return HttpResponseRedirect(next_page)
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if settings.CAS_LOGGED_MSG is not None:
             message = settings.CAS_LOGGED_MSG % request.user.get_username()
             messages.success(request, message)
@@ -121,7 +121,7 @@ def logout(request, next_page=None):
     if settings.CAS_LOGOUT_COMPLETELY:
         protocol = get_protocol(request)
         host = request.get_host()
-        redirect_url = urllib_parse.urlunparse(
+        redirect_url = urlunparse(
             (protocol, host, next_page, '', '', ''),
         )
         client = get_cas_client()

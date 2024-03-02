@@ -13,23 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import include, url
+from django.urls import include, re_path
 
 # from django.conf import settings
 # from django.conf.urls.static import static
 from home import views
 from django_cas_ng.views import login, logout
 
+app_name = 'placement'
 urlpatterns = [
 # added for CAS
-    url(r'^accounts/login$', login, name='cas_ng_login'),
-    url(r'^accounts/logout$', logout, name='cas_ng_logout'),
-    url(r'^$', views.index, name= "index"),
-    url(r'^home/$', views.SearchForm, name= "home"),
-    url(r'^language/', include("languages.urls", namespace="language")),
-    url(r'^levels/', include("levels.urls", namespace="levels")),
-    url(r'^scoresheet/', include("scoresheet.urls", namespace="scoresheet")),
-    url(r'^users/', include("users.urls", namespace="users")),
-    url(r'^languages_users/', include("languages_users.urls", namespace="languages_users")),
-    url(r'^status/', include("status.urls", namespace="status")),
+    re_path(r'^accounts/login$', login, name='cas_ng_login'),
+    re_path(r'^accounts/logout$', logout, name='cas_ng_logout'),
+    re_path(r'^$', views.index, name= "index"),
+    re_path(r'^home/$', views.SearchForm, name= "home"),
+    re_path(r'^language/', include(("languages.urls", app_name), namespace="language")),
+    re_path(r'^levels/', include(("levels.urls", app_name), namespace="levels")),
+    re_path(r'^scoresheet/', include(("scoresheet.urls", app_name), namespace="scoresheet")),
+    re_path(r'^users/', include(("users.urls", app_name), namespace="users")),
+    re_path(r'^languages_users/', include(("languages_users.urls", app_name), namespace="languages_users")),
+    re_path(r'^status/', include(("status.urls", app_name), namespace="status")),
 ]

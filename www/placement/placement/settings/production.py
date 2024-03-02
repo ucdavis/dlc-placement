@@ -52,13 +52,12 @@ if not settings.DEBUG:
     #Crispy form templates for bootstrap
     CRISPY_TEMPLATE_PACK = 'bootstrap3'
     
-    MIDDLEWARE_CLASSES = [
+    MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
@@ -126,11 +125,6 @@ if not settings.DEBUG:
             'PASSWORD': os.environ['DB_PASSWORD'],
             'HOST': os.environ['DB_HOST'],
             'PORT': os.environ['DB_PORT'],
-            'OPTIONS': {
-                'ssl': {
-                    'ca': '/var/www/html/us-west-2-bundle.pem'
-                }
-            }
         },
         'production': {
             'ENGINE': 'django.db.backends.mysql',
@@ -139,6 +133,11 @@ if not settings.DEBUG:
             'PASSWORD': os.environ['DB_PASSWORD'],
             'HOST': os.environ['DB_HOST'],
             'PORT': os.environ['DB_PORT'],
+            'OPTIONS': {
+                'ssl': {
+                    'ca': '/var/www/html/us-west-2-bundle.pem'
+                }
+            }
         }, 
     }
     
