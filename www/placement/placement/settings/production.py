@@ -25,6 +25,7 @@ if not settings.DEBUG:
     DEBUG = False
     
     ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(',')
+    CSRF_TRUSTED_ORIGINS = os.environ['CSRF_TRUSTED_ORIGINS'].split(',')
     
     # Application definition
     INSTALLED_APPS = [
