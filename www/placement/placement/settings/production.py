@@ -26,7 +26,10 @@ if not settings.DEBUG:
     
     ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(',')
     CSRF_TRUSTED_ORIGINS = os.environ['CSRF_TRUSTED_ORIGINS'].split(',')
-    
+
+    # Fixes Origin checking failed - https://...
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
     # Application definition
     INSTALLED_APPS = [
         'django.contrib.admin',
