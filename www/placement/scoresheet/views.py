@@ -182,7 +182,8 @@ def scoresheet_create(request):
                        "exam_date" : form.cleaned_data['exam_date'],
                        "email" : form.cleaned_data['email'],
                        "placement_level" : placement_level,
-                       "queryset_checker" : duplicated_checker           
+                       "queryset_checker" : duplicated_checker,
+                       "comments" : form.cleaned_data.get('comments', '')
                        }
                         
 # If scoresheet is not duplicated send confirmation email to student
