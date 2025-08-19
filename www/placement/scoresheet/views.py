@@ -380,7 +380,8 @@ def scoresheet_bulk_input(request):
                                        "exam_date" : instance.exam_date,
                                        "email" : instance.email,
                                        "placement_level" : placement_level,
-                                       "queryset_checker" : duplicated_checker
+                                       "queryset_checker" : duplicated_checker,
+                                       "comments": instance.comments
                                        }
 
                             # If scoresheet was duplicated add a warning to message and send email to administrators
@@ -461,7 +462,8 @@ def scoresheet_detail(request, id=None):  # @ReservedAssignment
                        "sid" : scoresheet.sid,                       
                        "exam_date" : scoresheet.exam_date,
                        "email" : scoresheet.email,
-                       "placement_level" : placement,                   
+                       "placement_level" : placement,
+                       "comments" : scoresheet.comments
                        }
     # Send Email to student
         EMAIL_FAIL_SILENTLY=False
